@@ -2,7 +2,7 @@
 """
     Usage:
         direction_order.py BVEC BVAL [-v | -q] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT]
-        direction_orderg.py BVEC [-v | -q] --output=OUTPUT [-t TIME] [-n NUM]
+        direction_order.py BVEC [-v | -q] --output=OUTPUT [-t TIME] [-n NUM]
 
     Options:
         -o OUTPUT, --output OUTPUT  output file 
