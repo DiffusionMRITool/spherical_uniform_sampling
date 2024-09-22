@@ -47,5 +47,3 @@ if __name__ == "__main__":
         for i, points in enumerate(output):
             realPath = f"{root}_shell{i}{ext}"
             write_bvec(realPath, points)
-
-    

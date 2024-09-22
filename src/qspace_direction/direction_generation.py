@@ -41,7 +41,10 @@ if __name__ == "__main__":
     vects = do_func(
         output_flag,
         optimize,
-        numbers, initVecs, antipodal=antipodal, max_iter=num_iter,
+        numbers,
+        initVecs,
+        antipodal=antipodal,
+        max_iter=num_iter,
     )
     splitPoint = np.cumsum(numbers).tolist()
     splitPoint.insert(0, 0)
