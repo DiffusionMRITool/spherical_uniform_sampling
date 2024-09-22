@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
     Usage:
         direction_subsampling.py [-v | -q] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-t TIME] 

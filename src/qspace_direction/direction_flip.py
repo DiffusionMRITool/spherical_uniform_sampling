@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
     Usage:
         direction_flip.py [-v | -q] --input=INPUT --output=OUTPUT [-t TIME] [-c CRITERIA]

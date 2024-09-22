@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
     Usage:
         generation_geem.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] 

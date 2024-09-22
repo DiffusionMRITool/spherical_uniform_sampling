@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
     Usage:
         direction_order.py BVEC BVAL [-v | -q] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT]

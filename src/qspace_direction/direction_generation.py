@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
     Usage:
         direction_generation.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] 
