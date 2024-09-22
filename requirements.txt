@@ -1,0 +1,4 @@
+numpy==1.24.4
+scipy==1.10.1
+gurobipy==11.0.0
+docopt==0.6.2
