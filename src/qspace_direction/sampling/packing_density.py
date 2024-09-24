@@ -396,7 +396,7 @@ def optimalSplit(
     time_limit=600,
     output_flag: int = 1,
 ):
-    if isinstance(time_limit, (int, float)):
+    if isinstance(time_limit, float):
         time_limit = [time_limit for _ in range(len(points_per_split))]
     result = []
     picked_points = []
@@ -439,6 +439,7 @@ def increSortingMultiShell(
     incre_points: np.ndarray,
     incre_bval: np.ndarray,
     fraction: List[float],
+    bvalList: List[float],
     num: int,
     S: int,
     w: float = 0.5,
@@ -552,7 +553,7 @@ def increSortingMultiShell(
                 * M
                 for s in range(S)
                 for i, j in filter(
-                    lambda x: pos2bval[x[0]] == pos2bval[x[1]] == s,
+                    lambda x: pos2bval[x[0]] == pos2bval[x[1]] == bvalList[s],
                     product(range(N), range(N, N + K)),
                 )
             ),
@@ -620,6 +621,7 @@ def optimalSplitMultiShell(
             np.array(incre),
             incre_bval,
             fraction,
+            bvalues,
             p,
             S,
             w=w,
