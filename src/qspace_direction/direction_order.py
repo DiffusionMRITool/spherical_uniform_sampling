@@ -47,20 +47,30 @@ if __name__ == "__main__":
     root, ext = os.path.splitext(outputFile)
 
     if arguments["BVAL"]:
-        #JUDGE
         inputBValFile = arguments["BVAL"]
         bvalues, bvecs = read_bvec_bval(inputBVecFile, inputBValFile, fsl_flag)
 
-        bvec, bval = do_func(
-            output_flag,
-            incremental_sorting_multi_shell,
-            bvecs,
-            bvalues,
-            gen_split(num, sum(len(l) for l in bvecs)),
-            w=weight,
-            time_limit=time,
-            output_flag=output_flag,
-        )
+        if len(bvalues) == 1:
+            bvec = do_func(
+                output_flag,
+                incremental_sorting_single_shell,
+                bvecs,
+                gen_split(num, len(bvecs)),
+                time,
+                output_flag,
+            ) 
+            bval = [bvalues[0] for _ in len(bvecs)]
+        else:
+            bvec, bval = do_func(
+                output_flag,
+                incremental_sorting_multi_shell,
+                bvecs,
+                bvalues,
+                gen_split(num, sum(len(l) for l in bvecs)),
+                w=weight,
+                time_limit=time,
+                output_flag=output_flag,
+            )
         write_bvec(f"{root}_bvec{ext}", bvec, fsl_flag)
         write_bval(f"{root}_bval{ext}", bval, fsl_flag)
     else:
