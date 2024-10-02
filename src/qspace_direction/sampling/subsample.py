@@ -9,6 +9,14 @@ from .cnlo import covering_radius_upper_bound
 
 
 def identity(x):
+    """identity funtion
+
+    Args:
+        x (Any): Any
+
+    Returns:
+        x: Any
+    """
     return x
 
 
@@ -21,19 +29,19 @@ def multiple_subset_from_single_set(
     time_limit=600,
     output_flag=1,
 ):
-    """_summary_
+    """Given a single set of points, uniformly select multiple sets of samples from it
 
     Args:
-        points (np.ndarray): _description_
-        points_per_shell (np.ndarray): _description_
-        lb (_type_, optional): _description_. Defaults to None.
-        w (float, optional): _description_. Defaults to 0.5.
-        antipodal (bool, optional): _description_. Defaults to True.
-        time_limit (int, optional): _description_. Defaults to 600.
-        output_flag (int, optional): _description_. Defaults to 1.
+        points (np.ndarray): A single set of points to choose from
+        points_per_shell (np.ndarray): Number of sample to select for each shell
+        lb (np.ndarray, optional): Lower bound for covering radius of each shell. This is used to help GUROBI to generate better result. Defaults to None.
+        w (float, optional): Balance for indivial shell and combined shell. Defaults to 0.5.
+        antipodal (bool, optional): Whether or not to consider antipodal constraint. Defaults to True.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
 
     Returns:
-        _type_: _description_
+        List: Set of points chosen for each shell 
     """
     N = len(points)
     S = len(points_per_shell)
@@ -103,6 +111,20 @@ def single_subset_from_single_set(
     time_limit=600,
     output_flag=1,
 ):
+    """Given a single set of points, uniformly select K samples from the given N samples
+
+
+    Args:
+        points (np.ndarray): A single set of points to choose from
+        K (int): Number of points to choose from
+        lb (float, optional): Lower bound for covering radius of each shell. This is used to help GUROBI to generate better result. Defaults to None.
+        antipodal (bool, optional): Whether or not to consider antipodal constraint. Defaults to True.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        Array (K, 3): The chosen K points
+    """
     N = len(points)
     M = 2
     transform = np.abs if antipodal else identity
@@ -149,19 +171,19 @@ def multiple_subset_from_multiple_set(
     time_limit: float = 600,
     output_flag: int = 1,
 ):
-    """_summary_
+    """Given multiple sets of points, uniformly select K_s points from the N_s samples for the s-th shell
 
     Args:
-        points (List[np.ndarray]): _description_
-        points_per_shell (np.ndarray): _description_
-        lb (_type_, optional): _description_. Defaults to None.
-        w (float, optional): _description_. Defaults to 0.5.
-        antipodal (bool, optional): _description_. Defaults to True.
-        time_limit (float, optional): _description_. Defaults to 600.
-        output_flag (int, optional): _description_. Defaults to 1.
+        points (List[np.ndarray]): Multiple sets of points to choose from
+        points_per_shell (np.ndarray): Number of sample to select for each shell
+        lb (np.ndarray, optional): Lower bound for covering radius of each shell. This is used to help GUROBI to generate better result. Defaults to None.
+        w (float, optional): Balance for indivial shell and combined shell. Defaults to 0.5.
+        antipodal (bool, optional): Whether or not to consider antipodal constraint. Defaults to True.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
 
     Returns:
-        _type_: _description_
+        List: Set of points chosen for each shell 
     """
     N_s = [len(l) for l in points]
     S = len(points_per_shell)
