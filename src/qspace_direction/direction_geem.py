@@ -20,7 +20,7 @@ import os
 
 import numpy as np
 from docopt import docopt
-from sampling.geem import optimize as geem_optimize, compute_weights
+from sampling import geem_optimize, compute_weights
 from io_util import do_func, read_bvec, write_bvec
 
 

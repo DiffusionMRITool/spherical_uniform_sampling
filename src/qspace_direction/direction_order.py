@@ -14,7 +14,7 @@ Options:
 """
 import os
 from docopt import docopt
-from sampling import optimalSplit, optimalSplitMultiShell
+from sampling import incremental_sorting_single_shell, incremental_sorting_multi_shell
 from io_util import read_bvec, read_bvec_bval, write_bvec, write_bval, do_func
 
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
         bvec, bval = do_func(
             output_flag,
-            optimalSplitMultiShell,
+            incremental_sorting_multi_shell,
             bvecs,
             bvalues,
             gen_split(num, sum(len(l) for l in bvecs)),
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         bvec = read_bvec(inputBVecFile)
         output = do_func(
             output_flag,
-            optimalSplit,
+            incremental_sorting_single_shell,
             bvec,
             gen_split(num, len(bvec)),
             time,

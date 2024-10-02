@@ -20,7 +20,11 @@ import os
 
 import numpy as np
 from docopt import docopt
-from sampling import pdmm, pdms, pdss
+from sampling import (
+    multiple_subset_from_multiple_set,
+    multiple_subset_from_single_set,
+    single_subset_from_single_set,
+)
 from io_util import read_bvec, write_bvec, do_func
 
 
@@ -49,7 +53,7 @@ if __name__ == "__main__":
             output = [
                 do_func(
                     output_flag,
-                    pdss,
+                    single_subset_from_single_set,
                     inputBvec[0],
                     numbers[0],
                     lb=lb,
@@ -60,7 +64,7 @@ if __name__ == "__main__":
         else:
             output = do_func(
                 output_flag,
-                pdms,
+                multiple_subset_from_single_set,
                 inputBvec[0],
                 np.array(numbers),
                 lb=lb,
@@ -71,7 +75,7 @@ if __name__ == "__main__":
         len(inputBvec) == len(numbers)
         output = do_func(
             output_flag,
-            pdmm,
+            multiple_subset_from_multiple_set,
             inputBvec,
             np.array(numbers),
             lb=lb,

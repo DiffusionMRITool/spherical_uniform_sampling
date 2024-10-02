@@ -57,166 +57,6 @@ def packing_density_loss(vects: np.ndarray, start):
     )
 
 
-def optimalSortingSingleShell(
-    points: np.ndarray,
-    start=None,
-    time_limit: float = 600,
-    output_flag: int = 1,
-):
-    N = len(points)
-    M = 2
-    eps = 1e-5
-
-    dis = np.clip(np.abs(points @ points.T), -1, 1)
-
-    m = gp.Model("optimalSortingSingleShell")
-    m.Params.timeLimit = time_limit
-    m.Params.MIPFocus = 1
-    m.Params.OutputFlag = output_flag
-
-    x = m.addVars(N, N, lb=0, ub=1, vtype=GRB.CONTINUOUS, name="x")
-    cos_theta = m.addVars(
-        [i for i in np.arange(2, N)],
-        lb=np.cos(covering_radius_upper_bound(2 * np.arange(2, N))),
-        ub=1,
-        vtype=GRB.CONTINUOUS,
-        name="theta",
-    )
-
-    m.update()
-    if start:
-        for i, j in product(range(N), range(N)):
-            m.getVarByName(f"x[{i},{j}]").Start = start["x"][i, j]
-
-    m.addConstrs((x.sum(i, "*") == 1 for i in range(N)))
-    m.addConstrs((x.sum("*", j) == 1 for j in range(N)))
-    for i in range(N):
-        m.addSOS(GRB.SOS_TYPE1, [x[i, j] for j in range(N)])
-    for j in range(N):
-        m.addSOS(GRB.SOS_TYPE1, [x[i, j] for i in range(N)])
-
-    for k in range(2, N):
-        m.addConstrs(
-            (
-                cos_theta[k]
-                >= dis[i][j]
-                - (
-                    2
-                    - gp.LinExpr([1 for _ in range(k)], [x[i, l] for l in range(k)])
-                    - gp.LinExpr([1 for _ in range(k)], [x[j, l] for l in range(k)])
-                )
-                * M
-                for i, j in combinations(range(N), 2)
-            ),
-            name="c",
-        )
-    m.addConstrs(cos_theta[k] <= cos_theta[k + 1] for k in range(2, N - 1))
-
-    m.setObjective(
-        gp.LinExpr([i for i in range(2, N)], [cos_theta[i] for i in range(2, N)]),
-        GRB.MINIMIZE,
-    )
-
-    m.optimize()
-
-    l = [None for _ in range(N)]
-    for i, j in product(range(N), range(N)):
-        if np.abs(m.getVarByName(f"x[{i},{j}]").X - 1) < eps:
-            l[j] = points[i]
-
-    return l
-
-
-def incre_sorting(
-    fixed_points: np.ndarray,
-    incre_points: np.ndarray,
-    start=False,
-    time_limit: float = 600,
-    output_flag: int = 1,
-):
-    N = len(incre_points)
-    K = len(fixed_points)
-    M = np.pi / 2
-    eps = 1e-5
-
-    points = np.concatenate([incre_points, fixed_points])
-    dis = np.clip(np.abs(points @ points.T), -1, 1)
-    fixed_angle = np.cos(covering_radius(fixed_points))
-    lb = [
-        max(fixed_angle, np.cos(covering_radius_upper_bound(n)))
-        for n in range(K + 1, K + N)
-    ]
-
-    m = gp.Model("optimalSortingSingleShell")
-    m.Params.timeLimit = time_limit
-    m.Params.MIPFocus = 1
-    m.Params.OutputFlag = output_flag
-
-    x = m.addVars(N, N, lb=0, ub=1, vtype=GRB.CONTINUOUS, name="x")
-    cos_theta = m.addVars(
-        [i for i in range(1, N)],
-        lb=lb,
-        ub=1,
-        vtype=GRB.CONTINUOUS,
-        name="theta",
-    )
-
-    m.addConstrs((x.sum(i, "*") == 1 for i in range(N)))
-    m.addConstrs((x.sum("*", j) == 1 for j in range(N)))
-    for i in range(N):
-        m.addSOS(GRB.SOS_TYPE1, [x[i, j] for j in range(N)])
-    for j in range(N):
-        m.addSOS(GRB.SOS_TYPE1, [x[i, j] for i in range(N)])
-
-    m.update()
-    if start:
-        for i, j in product(range(N), range(N)):
-            m.getVarByName(f"x[{i},{j}]").Start = 1 if i == j else 0
-
-    for k in range(1, N):
-        m.addConstrs(
-            (
-                cos_theta[k]
-                >= dis[i][j]
-                - (
-                    2
-                    - gp.LinExpr([1 for _ in range(k)], [x[i, l] for l in range(k)])
-                    - gp.LinExpr([1 for _ in range(k)], [x[j, l] for l in range(k)])
-                )
-                * M
-                for i, j in combinations(range(N), 2)
-            ),
-            name="c",
-        )
-        m.addConstrs(
-            (
-                cos_theta[k]
-                >= dis[i][j]
-                - (1 - gp.LinExpr([1 for _ in range(k)], [x[i, l] for l in range(k)]))
-                * M
-                for i, j in product(range(N), range(N, N + K))
-            ),
-            name="d",
-        )
-    m.addConstrs(cos_theta[k] <= cos_theta[k + 1] for k in range(1, N - 1))
-
-    m.setObjective(
-        gp.LinExpr(
-            [i for i in range(K + 1, K + N)], [cos_theta[i] for i in range(1, N)]
-        ),
-        GRB.MINIMIZE,
-    )
-
-    m.optimize()
-
-    l = [None for _ in range(N)]
-    for i, j in product(range(N), range(N)):
-        if np.abs(m.getVarByName(f"x[{i},{j}]").X - 1) < eps:
-            l[j] = points[i]
-
-    return l
-
-
 def greedy_sorting(points: List[np.ndarray], start):
     res, mx = None, -1
     for i in range(len(points[0])):
@@ -227,7 +67,7 @@ def greedy_sorting(points: List[np.ndarray], start):
     return res
 
 
-def optimalSortingSingleShellInit(
+def incremental_sorting_single_shell_init(
     points: np.ndarray,
     K: int,
     start: bool = False,
@@ -299,7 +139,7 @@ def optimalSortingSingleShellInit(
     return l
 
 
-def increSorting(
+def incremental_sorting_single_shell_incre(
     fixed_points: np.ndarray,
     incre_points: np.ndarray,
     num: int,
@@ -390,7 +230,7 @@ def increSorting(
     return l
 
 
-def optimalSplit(
+def incremental_sorting_single_shell(
     points: np.ndarray,
     points_per_split: np.ndarray,
     time_limit=600,
@@ -406,11 +246,11 @@ def optimalSplit(
     for num, t in zip(points_per_split, time_limit):
         remained_points = greedy_sorting([remained_points], start=picked_points)[0]
         pick = np.array(
-            optimalSortingSingleShellInit(
+            incremental_sorting_single_shell_init(
                 remained_points, num, True, time_limit=t, output_flag=output_flag
             )
             if flag == 0
-            else increSorting(
+            else incremental_sorting_single_shell_incre(
                 picked_points,
                 remained_points,
                 num,
@@ -433,7 +273,7 @@ def optimalSplit(
     return np.concatenate(result)
 
 
-def increSortingMultiShell(
+def incremental_sorting_multi_shell_incre(
     fixed_points: np.ndarray,
     fixed_bval: np.ndarray,
     incre_points: np.ndarray,
@@ -591,7 +431,7 @@ def increSortingMultiShell(
     return l
 
 
-def optimalSplitMultiShell(
+def incremental_sorting_multi_shell(
     vects: List[np.ndarray],
     bvalues: List[float],
     points_per_split: List[int],
@@ -615,7 +455,7 @@ def optimalSplitMultiShell(
     incre_bval = bvals
 
     for p in points_per_split:
-        picked = increSortingMultiShell(
+        picked = incremental_sorting_multi_shell_incre(
             np.array(fixed),
             fixed_bval,
             np.array(incre),

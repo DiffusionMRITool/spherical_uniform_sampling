@@ -204,7 +204,7 @@ def grad_cost(vects, *args):
     )
 
 
-def optimize(
+def cnlo_optimize(
     points_per_shell,
     initialization=None,
     antipodal=True,

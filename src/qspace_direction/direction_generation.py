@@ -21,7 +21,7 @@ import os
 
 import numpy as np
 from docopt import docopt
-from sampling import optimize
+from sampling import cnlo_optimize
 from io_util import do_func, read_bvec, write_bvec
 
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     vects = do_func(
         output_flag,
-        optimize,
+        cnlo_optimize,
         numbers,
         initVecs,
         antipodal=antipodal,

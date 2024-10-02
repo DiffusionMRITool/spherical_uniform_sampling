@@ -6,7 +6,7 @@ import numpy as np
 from gurobipy import GRB
 
 
-def dirflip(
+def dirflip_SC(
     points: np.ndarray,
     time_limit=600,
     output_flag=1,
@@ -56,7 +56,7 @@ def dirflip(
     return l
 
 
-def dirflipEEM(
+def dirflip_EEM(
     points: np.ndarray,
     order=1,
     time_limit=600,
@@ -109,7 +109,7 @@ def dirflipEEM(
     return l
 
 
-def dirflipMultiShell(
+def dirflip_multi_shell_SC(
     points: List[np.ndarray],
     w=0.5,
     time_limit=600,
@@ -222,7 +222,7 @@ def dirflipMultiShell(
     return l
 
 
-def dirflipMultiShellEEM(
+def dirflip_multi_shell_EEM(
     points: List[np.ndarray],
     w=0.5,
     order=1,
