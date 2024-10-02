@@ -15,13 +15,13 @@ Options:
 import os
 
 from docopt import docopt
-from sampling import (
+from .sampling import (
     milpflip_SC,
     milpflip_EEM,
     milp_multi_shell_SC,
     milpflip_multi_shell_EEM,
 )
-from io_util import do_func, read_bvec, write_bvec
+from .lib import do_func, read_bvec, write_bvec
 
 
 if __name__ == "__main__":

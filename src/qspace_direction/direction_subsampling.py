@@ -21,12 +21,12 @@ import os
 
 import numpy as np
 from docopt import docopt
-from sampling import (
+from .sampling import (
     multiple_subset_from_multiple_set,
     multiple_subset_from_single_set,
     single_subset_from_single_set,
 )
-from io_util import read_bvec, write_bvec, do_func
+from .lib import read_bvec, write_bvec, do_func
 
 
 if __name__ == "__main__":

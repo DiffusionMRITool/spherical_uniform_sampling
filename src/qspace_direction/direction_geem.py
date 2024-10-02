@@ -21,8 +21,8 @@ import os
 
 import numpy as np
 from docopt import docopt
-from sampling import geem_optimize, compute_weights
-from io_util import do_func, read_bvec, write_bvec
+from .sampling import geem_optimize, compute_weights
+from .lib import do_func, read_bvec, write_bvec
 
 
 if __name__ == "__main__":

@@ -15,15 +15,15 @@ Options:
 
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
-    1. Caruyer, Emmanuel, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.
-    2. Caruyer, Emmanuel, and Rachid Deriche. "Diffusion MRI signal reconstruction with continuity constraint and optimal regularization." Medical Image Analysis 16, no. 6 (2012): 1113-1120.
+    2. Caruyer, Emmanuel, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.
+    3. Caruyer, Emmanuel, and Rachid Deriche. "Diffusion MRI signal reconstruction with continuity constraint and optimal regularization." Medical Image Analysis 16, no. 6 (2012): 1113-1120.
 """
 import os
 
 import numpy as np
 from docopt import docopt
-from sampling import cnlo_optimize
-from io_util import do_func, read_bvec, write_bvec
+from .sampling import cnlo_optimize
+from .lib import do_func, read_bvec, write_bvec
 
 
 if __name__ == "__main__":
