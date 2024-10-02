@@ -14,7 +14,7 @@ def initialize(points_per_shell, antipodal, iprint=0) -> np.ndarray:
         iprint (int, optional): whether to output. Defaults to 0.
 
     Returns:
-        array shape (K, 3), where K is the total number of points
+        Array: array shaped (K, 3), where K is the total number of points
     """
     nb_shells = len(points_per_shell)
     K = np.sum(points_per_shell)
@@ -37,7 +37,15 @@ def initialize(points_per_shell, antipodal, iprint=0) -> np.ndarray:
     return points
 
 
-def covering_radius_upper_bound(num):
+def covering_radius_upper_bound(num: int):
+    """Upper bound of covering radius for a scheme with num points
+
+    Args:
+        num (int): Number of points
+
+    Returns:
+        float: Upper bound of covering radius
+    """
     if isinstance(num, int) and num < 3:
         return np.pi / 2
     upperBoundEuc = np.sqrt(4 - (1 / np.sin(np.pi * num / (6 * (num - 2)))) ** 2)
@@ -46,11 +54,35 @@ def covering_radius_upper_bound(num):
 
 
 def covering_radius(vects: np.ndarray, antipodal=True):
+    """Covering radius of a point set
+
+    Args:
+        vects (np.ndarray): Given point set.
+        antipodal (bool, optional): Whether or not to consider antipodal constraint. Defaults to True.
+
+    Returns:
+        float: Covering radius
+    """
     innerProductAll = np.abs(vects @ vects.T) if antipodal else vects @ vects.T
     return np.arccos((np.clip(np.max(np.triu(innerProductAll, 1)), -1, 1)))
 
 
 def inequality_constraints_9b(vects, *args):
+    """The covering radius of s-th shell is smaller then the angle between every point pairs in s-th shell. This corresponds to eq. (9b) in [1]
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        differce between $\theta_s$ and each angle in s-th shell
+
+    Reference
+    ---------
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    """
     N = args[1]
     spherical_index = args[4]
     transform = args[8]
@@ -65,6 +97,17 @@ def inequality_constraints_9b(vects, *args):
 
 
 def grad_inequality_constraints_9b(vects, *args):
+    """This is the gradient of :func:`inequality_constraints_9b`.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        Grdients
+    """
     S = args[0]
     N = args[1]
     spherical_index = args[4]
@@ -84,6 +127,21 @@ def grad_inequality_constraints_9b(vects, *args):
 
 
 def inequality_constraints_9c(vects, *args):
+    """The covering radius of combined shell is smaller then the angle between every point pairs. This corresponds to eq. (9c) in [1]
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        differce between $\theta_0$ and every angle between point pairs
+
+    Reference
+    ---------
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    """
     N = args[1]
     cross_spherical_index = args[5]
     transform = args[8]
@@ -98,6 +156,17 @@ def inequality_constraints_9c(vects, *args):
 
 
 def grad_inequality_constraints_9c(vects, *args):
+    """This is the gradient of :func:`inequality_constraints_9c`.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        Grdients
+    """
     S = args[0]
     N = args[1]
     cross_spherical_index = args[5]
@@ -117,6 +186,21 @@ def grad_inequality_constraints_9c(vects, *args):
 
 
 def inequality_constraints_9d(vects, *args):
+    """The diffence between target and initialization is no more then $\delta_0$. This corresponds to eq. (9d) in [1]
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        $\delta_0$ minus differce between target and initialization 
+
+    Reference
+    ---------
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    """
     N = args[1]
     init = args[2]
     delta = args[3]
@@ -127,6 +211,17 @@ def inequality_constraints_9d(vects, *args):
 
 
 def grad_inequality_constraints_9d(vects, *args):
+    """This is the gradient of :func:`inequality_constraints_9d`.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        Grdients
+    """
     S = args[0]
     N = args[1]
     init = args[2]
@@ -145,12 +240,38 @@ def grad_inequality_constraints_9d(vects, *args):
 
 
 def inequality_constraints_9e(vects, *args):
+    """Covering radius in each individual shell is greater then that of combined shell. This corresponds to eq. (9c) in [1]
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        differce between $\theta_s$ and $\theta_0$
+
+    Reference
+    ---------
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    """
     N = args[1]
     s = args[0]
     return vects[3 * N : 3 * N + s] - vects[-1]
 
 
 def grad_inequality_constraints_9e(vects, *args):
+    """This is the gradient of :func:`inequality_constraints_9e`.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        Grdients
+    """
     S = args[0]
     N = args[1]
     grad = np.zeros((S, N * 3 + S + 1))
@@ -161,12 +282,38 @@ def grad_inequality_constraints_9e(vects, *args):
 
 
 def equality_constraints(vects, *args):
+    """Each points is on the unit shpere. This corresponds to eq. (9f) in [1]
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        Difference between squared vector norms and 1.
+
+    Reference
+    ---------
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    """
     N = args[1]
     points = vects[: 3 * N].reshape((N, 3))
     return (points**2).sum(1) - 1.0
 
 
 def grad_equality_constraints(vects, *args):
+    """This is the gradient of :func:`equality_constraints`.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        Grdients
+    """
     s = args[0]
     N = args[1]
     points = vects[: 3 * N].reshape((N, 3))
@@ -177,6 +324,17 @@ def grad_equality_constraints(vects, *args):
 
 
 def inequality_constraints(vects, *args):
+    """This zip all inequality constraints together.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        every inequality constraints
+    """
     return np.concatenate(
         (
             inequality_constraints_9b(vects, *args),
@@ -188,6 +346,17 @@ def inequality_constraints(vects, *args):
 
 
 def grad_inequality_constraints(vects, *args):
+    """This zip all grdient of inequality constraints together.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        every grdient of inequality constraints
+    """
     return np.concatenate(
         (
             grad_inequality_constraints_9b(vects, *args),
@@ -199,6 +368,21 @@ def grad_inequality_constraints(vects, *args):
 
 
 def cost(vects, *args):
+    """Weighted average of covering radius in each individual shell and combined shell. This corresponds to eq. (9a) in [1]
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    float
+        Value of loss function
+
+    Reference
+    ---------
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    """
     s = args[0]
     N = args[1]
     w = args[6]
@@ -206,6 +390,17 @@ def cost(vects, *args):
 
 
 def grad_cost(vects, *args):
+    """This is the gradient of :func:`cost`.
+
+    Parameters
+    ----------
+    vects : Array shaped (3 * N + S,)
+
+    Returns
+    -------
+    Array
+        Grdients
+    """
     s = args[0]
     N = args[1]
     w = args[6]
@@ -223,6 +418,34 @@ def cnlo_optimize(
     max_iter=1000,
     iprint=1,
 ):
+    """Generate a set of uniform sampling schemes given the number on each shell. This uses CNLO algorithm in [1]
+
+    Parameters
+    ----------
+    points_per_shell : List[int]
+        Number of points on each shell
+    initialization : Array, optional
+        Optional initialization for CNLO algorithm, by default None, which will then use GEEM as initialization
+    antipodal : bool, optional
+        Whether or not to consider antipodal constraint, by default True
+    delta : float, optional
+        Maximum distance beween initialization and optimized result, by default 0.1
+    w : float, optional
+        Balance for indivial shell and combined shell, by default 0.5
+    max_iter : int, optional
+        Max round of iteration for SLSQP, by default 1000
+    iprint : int, optional
+        Whether or not to print message by SLSQP, by default 1
+
+    Returns
+    -------
+    Array
+        Set of points generated for each shell 
+
+    Reference
+    ---------
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    """
     nb_points = np.sum(points_per_shell)
     nb_shells = len(points_per_shell)
     if initialization is None:
