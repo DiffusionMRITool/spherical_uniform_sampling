@@ -13,6 +13,11 @@ Options:
     -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
     --fslgrad,                  If set, program will read and write in fslgrad format
 
+Examples:
+    python -m qspace_direction.direction_subsampling -i scheme.txt -n 30 -o subsample.txt
+    python -m qspace_direction.direction_subsampling -i scheme.txt -n 10,10,10 -o subsample.txt
+    python -m qspace_direction.direction_subsampling -i scheme_shell0.txt,scheme_shell1.txt,scheme_shell2.txt -n 30,30,30 -o subsample.txt
+
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
 """

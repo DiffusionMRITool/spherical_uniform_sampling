@@ -12,6 +12,10 @@ Options:
     --max_iter ITER                 Maximum iteration rounds for optimization    [default: 1000]
     --fslgrad,                      If set, program will read and write in fslgrad format
 
+Example:
+    python -m qspace_direction.generation_geem --output scheme.txt -n 30
+    python -m qspace_direction.generation_geem --output scheme.txt -n 90,90,90    
+
 Reference:
     1. Emmanuel Caruyer, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.
     2. Emmanuel Caruyer, Jian Cheng, Christophe Lenglet, Guillermo Sapiro, Tianzi Jiang, and Rachid Deriche,"Optimal Design of Multiple Q-shells experiments for Diffusion MRI",MICCAI Workshop on Computational Diffusion MRI (CDMRI'11), pp. 45–53, 2011.

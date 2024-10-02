@@ -12,6 +12,10 @@ Options:
     --max_iter ITER                 Maximum iteration rounds for optimization    [default: 1000]
     --fslgrad,                      If set, program will read and write in fslgrad format
 
+Example:
+    python -m qspace_direction.direction_continous_optimization --output scheme.txt -n 30
+    python -m qspace_direction.direction_continous_optimization --output scheme.txt -n 90,90,90    
+
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
     2. Emmanuel Caruyer, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.

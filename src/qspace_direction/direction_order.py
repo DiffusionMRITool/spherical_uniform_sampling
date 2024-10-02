@@ -11,6 +11,10 @@ Options:
     -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -t TIME, --time_limit TIME  maximum time to run milp algorithm    [default: 600]
     --fslgrad,                  If set, program will read and write in fslgrad format
+
+Examples:
+    python -m qspace_direction.direction_order scheme.txt --output ordered.txt
+    python -m qspace_direction.direction_order bvec.txt bval.txt --output ordered.txt
 """
 import os
 from docopt import docopt
