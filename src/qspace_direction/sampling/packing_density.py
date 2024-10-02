@@ -8,7 +8,17 @@ from gurobipy import GRB
 from .cnlo import covering_radius, covering_radius_upper_bound
 
 
-def greedy_sorting_init(points: List[np.ndarray], init, start):
+def greedy_sorting_init(points: List[np.ndarray], init: int, start: List[np.ndarray]):
+    """Use greedy algorithm to sort. This will be used as initialization for MILP algorithm.
+
+    Args:
+        points (List[np.ndarray]): Points to be sorted.
+        init (int): The first index to choose from points.
+        start (List[np.ndarray]): Points that are already sorted.
+
+    Returns:
+        Array: Sorted points
+    """
     N_s = [len(l) for l in points]
     l = len(start)
     cons = np.concatenate(points)
@@ -47,7 +57,16 @@ def greedy_sorting_init(points: List[np.ndarray], init, start):
     return result
 
 
-def packing_density_loss(vects: np.ndarray, start):
+def packing_density_loss(vects: np.ndarray, start: np.ndarray):
+    """Packing density increment of points after appending vects to start
+
+    Args:
+        vects (np.ndarray): Points to calculate packing density
+        start (np.ndarray): Existing points
+
+    Returns:
+        float: Loss value
+    """
     cons = np.concatenate([start, vects]) if len(start) > 0 else vects
     return np.sum(
         [
@@ -57,7 +76,17 @@ def packing_density_loss(vects: np.ndarray, start):
     )
 
 
-def greedy_sorting(points: List[np.ndarray], start):
+def greedy_sorting(points: List[np.ndarray], start: List[np.ndarray]):
+    """Greedy sort. This adds a step of iterating through the first point chosen.
+
+    Args:
+        points (List[np.ndarray]): Points to sort.
+        start (List[np.ndarray]): Points that are already sorted.
+
+    Returns:
+        Array: Sorted points
+    """
+    
     res, mx = None, -1
     for i in range(len(points[0])):
         tmp = greedy_sorting_init(points, i, start)
@@ -74,6 +103,18 @@ def incremental_sorting_single_shell_init(
     time_limit: float = 600,
     output_flag: int = 1,
 ):
+    """Incremental algorithm for sorting points. This function sorts the first K points from entire point set.
+
+    Args:
+        points (List[np.ndarray]): Points to sort.
+        K (int): Number of points to sort
+        start (bool, optional): Whether to use existing order as initialization. Defaults to False.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        Array: Array shaped (K, 3), sorted K points
+    """
     N = len(points)
     M = 2
     eps = 1e-5
@@ -147,6 +188,19 @@ def incremental_sorting_single_shell_incre(
     time_limit: float = 600,
     output_flag: int = 1,
 ):
+    """Incremental algorithm for sorting points. This function sorts the next num points from incre_points with fixed_points already sorted
+
+    Args:
+        fixed_points (np.ndarray): Points that are already sorted
+        incre_points (np.ndarray): Points to sort.
+        num (int): Number of points to sort
+        start (bool, optional): Whether to use existing order as initialization. Defaults to False.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        Array: Array shaped (num, 3), sorted num points
+    """
     N = len(incre_points)
     K = len(fixed_points)
     M = np.pi / 2
@@ -235,7 +289,18 @@ def incremental_sorting_single_shell(
     points_per_split: np.ndarray,
     time_limit=600,
     output_flag: int = 1,
-):
+):  
+    """Incremental algorithm for sorting points. Given a way to split the points into segments, this function then sort them segment by segment.
+
+    Args:
+        points (np.ndarray): Points to sort.
+        points_per_split (np.ndarray): Way to split number of points into segment
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        Array: Sorted points
+    """
     if isinstance(time_limit, float):
         time_limit = [time_limit for _ in range(len(points_per_split))]
     result = []
@@ -287,6 +352,39 @@ def incremental_sorting_multi_shell_incre(
     time_limit: float = 600,
     output_flag: int = 1,
 ):
+    """Incremental algorithm for sorting multiple shell schemes. This function sorts the next num points from incre_points with fixed_points already sorted
+
+    Parameters
+    ----------
+    fixed_points : np.ndarray
+        B-vectors of points that are already sorted.
+    fixed_bval : np.ndarray
+        B-values of points that are already sorted.
+    incre_points : np.ndarray
+        B-vectors of points to sort.
+    incre_bval : np.ndarray
+        B-values of points to sort.
+    fraction : List[float]
+        A balence factor for each shell. This is normally set as N_s / N for each shell with N_s points.
+    bvalList : List[float]
+        List of distict bvals
+    num : int
+        Number of points to sort
+    S : int
+        Number of shells
+    w : float, optional
+        Balance for indivial shell and combined shell, by default 0.5
+    start : bool, optional
+        Whether to use existing order as initialization, by default True
+    time_limit : float, optional
+        Time limit for GUROBI to run, by default 600
+    output_flag : int, optional
+        GUROBI output flag, by default 1
+
+    Returns
+    -------
+    Array: Array shaped (num, 3), sorted num points
+    """    
     N = len(incre_points)
     K = len(fixed_points)
     M = np.pi / 2
@@ -439,6 +537,19 @@ def incremental_sorting_multi_shell(
     time_limit: float = 600,
     output_flag=1,
 ):
+    """Incremental algorithm for sorting multiple shell schemes. Given a way to split the points into segments, this function then sort them segment by segment.
+
+    Args:
+        vects (List[np.ndarray]): Points to sort
+        bvalues (List[float]): B-values of each point
+        points_per_split (List[int]): Way to split number of points into segment
+        w (float, optional): Balance for indivial shell and combined shell, by default 0.5
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        (list[np.ndarray], list[int]): Sorted points and their corresponding b-value.
+    """
     Ns = [len(l) for l in vects]
     N = sum(Ns)
     S = len(Ns)
