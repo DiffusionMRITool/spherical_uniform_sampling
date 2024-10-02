@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 """
 Usage:
-    direction_flip.py [-v | -q] --input=INPUT --output=OUTPUT [-t TIME] [-c CRITERIA] [--fslgrad]
+    direction_flip.py [-v] --input=INPUT --output=OUTPUT [-t TIME] [-c CRITERIA] [--fslgrad]
 
 Options:
-    -o OUTPUT, --output OUTPUT        output file
-    -i INPUT, --input INPUT           input bvec files  
-    -v, --verbose                     output gurobi message
-    -q, --quiet                       do not output gurobi message
-    -c CRITERIA, --criteria CRITERIA  criteria Type(DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
-    -t TIME, --time_limit TIME        maximum time to run milp algorithm    [default: 600]
-    --fslgrad,                        if set, program will read and write in fslgrad format
+    -o OUTPUT, --output OUTPUT        Output file
+    -i INPUT, --input INPUT           Input bvec files  
+    -v, --verbose                     Output gurobi message
+    -c CRITERIA, --criteria CRITERIA  Criteria type (DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
+    -t TIME, --time_limit TIME        Maximum time to run milp algorithm    [default: 600]
+    --fslgrad,                        If set, program will read and write in fslgrad format
+
+Examples: 
 """
 import os
 

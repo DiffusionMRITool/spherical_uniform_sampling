@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 """
 Usage:
-    direction_subsampling.py [-v | -q] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-t TIME] [--fslgrad]
+    direction_subsampling.py [-v] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-t TIME] [--fslgrad]
 
 Options:
-    -o OUTPUT, --output OUTPUT  output file 
-    -i INPUT, --input INPUT     input bvec files
-    -n NUMBER, --number NUMBER  number chosen from each shell(in the same order of input files)
-    --lower_bound LB            lower bound for each shell and all shell conbined. This helps milp to optimize better
-    -v, --verbose               output gurobi message
-    -q, --quiet                 do not output gurobi message
-    -a, --antipodal             treat antipolar points as same
-    -t TIME, --time_limit TIME  maximum time to run milp algorithm    [default: 600]
-    --fslgrad,                  if set, program will read and write in fslgrad format
+    -o OUTPUT, --output OUTPUT  Output file 
+    -i INPUT, --input INPUT     Input bvec files
+    -n NUMBER, --number NUMBER  Number chosen from each shell(in the same order of input files)
+    --lower_bound LB            Lower bound for each shell and all shell conbined. This helps milp to optimize better
+    -v, --verbose               Output gurobi message
+    -a, --antipodal             Treat antipolar points as same
+    -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
+    --fslgrad,                  If set, program will read and write in fslgrad format
 
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199

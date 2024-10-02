@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 """
 Usage:
-    direction_order.py BVEC BVAL [-v | -q] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT] [--fslgrad]
-    direction_order.py BVEC [-v | -q] --output=OUTPUT [-t TIME] [-n NUM] [--fslgrad]
+    direction_order.py BVEC BVAL [-v] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT] [--fslgrad]
+    direction_order.py BVEC [-v] --output=OUTPUT [-t TIME] [-n NUM] [--fslgrad]
 
 Options:
-    -o OUTPUT, --output OUTPUT  output file 
-    -v, --verbose               output gurobi message
-    -q, --quiet                 do not output gurobi message
-    -n NUM, --number NUM        number of points per split. [default: 3]
-    -w WEIGHT, --weight WEIGHT  weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
+    -o OUTPUT, --output OUTPUT  Output file 
+    -v, --verbose               Output gurobi message
+    -n NUM, --number NUM        Number of points per split. [default: 3]
+    -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -t TIME, --time_limit TIME  maximum time to run milp algorithm    [default: 600]
-    --fslgrad,                  if set, program will read and write in fslgrad format
+    --fslgrad,                  If set, program will read and write in fslgrad format
 """
 import os
 from docopt import docopt
@@ -48,6 +47,7 @@ if __name__ == "__main__":
     root, ext = os.path.splitext(outputFile)
 
     if arguments["BVAL"]:
+        #JUDGE
         inputBValFile = arguments["BVAL"]
         bvalues, bvecs = read_bvec_bval(inputBVecFile, inputBValFile, fsl_flag)
 
