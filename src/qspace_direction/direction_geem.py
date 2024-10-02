@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 """
 Usage:
-    generation_geem.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] 
+    generation_geem.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] [--fslgrad]
 
 Options:
-    -o OUTPUT, --output OUTPUT  output file 
-    -n NUMBER, --number NUMBER  number chosen from each shell
-    -v, --verbose               output message
-    -q, --quiet                 do not output message
-    -i INIT, --initialization INIT     optimal initialization bvec files
-    -a, --asym                  If set, the orientation is not antipodal symmetric 
-    --max_iter ITER  Maximum iteration rounds for optimization    [default: 1000]
+    -o OUTPUT, --output OUTPUT      output file 
+    -n NUMBER, --number NUMBER      number chosen from each shell
+    -v, --verbose                   output message
+    -q, --quiet                     do not output message
+    -i INIT, --initialization INIT  optimal initialization bvec files
+    -a, --asym                      If set, the orientation is not antipodal symmetric 
+    --max_iter ITER                 Maximum iteration rounds for optimization    [default: 1000]
+    --fslgrad,                      if set, program will read and write in fslgrad format
 
 Reference:
     1. Caruyer, Emmanuel, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.
@@ -27,10 +28,11 @@ from io_util import do_func, read_bvec, write_bvec
 if __name__ == "__main__":
     arguments = docopt(__doc__)
 
+    fsl_flag = True if arguments["--fslgrad"] else False
     initVecs = None
     if arguments["--initialization"]:
         fileList = arguments["--initialization"].split(",")
-        initVecs = np.concatenate([read_bvec(name) for name in fileList])
+        initVecs = np.concatenate([read_bvec(name, fsl_flag) for name in fileList])
 
     numbers = list(map(int, arguments["--number"].split(",")))
 
@@ -64,8 +66,8 @@ if __name__ == "__main__":
 
     if len(numbers) == 1:
         realPath = f"{root}{ext}"
-        write_bvec(realPath, vects)
+        write_bvec(realPath, vects, fsl_flag)
     else:
         for i in range(len(numbers)):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, vects[splitPoint[i] : splitPoint[i + 1]])
+            write_bvec(realPath, vects[splitPoint[i] : splitPoint[i + 1]], fsl_flag)

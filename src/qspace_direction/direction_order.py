@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 """
 Usage:
-    direction_order.py BVEC BVAL [-v | -q] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT]
-    direction_order.py BVEC [-v | -q] --output=OUTPUT [-t TIME] [-n NUM]
+    direction_order.py BVEC BVAL [-v | -q] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT] [--fslgrad]
+    direction_order.py BVEC [-v | -q] --output=OUTPUT [-t TIME] [-n NUM] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT  output file 
     -v, --verbose               output gurobi message
     -q, --quiet                 do not output gurobi message
     -n NUM, --number NUM        number of points per split. [default: 3]
-    -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
-    -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
+    -w WEIGHT, --weight WEIGHT  weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
+    -t TIME, --time_limit TIME  maximum time to run milp algorithm    [default: 600]
+    --fslgrad,                  if set, program will read and write in fslgrad format
 """
 import os
 from docopt import docopt
@@ -32,6 +33,7 @@ def gen_split(num_per_split: int, n: int):
 if __name__ == "__main__":
     arguments = docopt(__doc__)
 
+    fsl_flag = True if arguments["--fslgrad"] else False
     inputBVecFile = arguments["BVEC"]
 
     time = float(arguments["--time_limit"])
@@ -47,7 +49,7 @@ if __name__ == "__main__":
 
     if arguments["BVAL"]:
         inputBValFile = arguments["BVAL"]
-        bvalues, bvecs = read_bvec_bval(inputBVecFile, inputBValFile)
+        bvalues, bvecs = read_bvec_bval(inputBVecFile, inputBValFile, fsl_flag)
 
         bvec, bval = do_func(
             output_flag,
@@ -59,10 +61,10 @@ if __name__ == "__main__":
             time_limit=time,
             output_flag=output_flag,
         )
-        write_bvec(f"{root}_bvec{ext}", bvec)
-        write_bval(f"{root}_bval{ext}", bval)
+        write_bvec(f"{root}_bvec{ext}", bvec, fsl_flag)
+        write_bval(f"{root}_bval{ext}", bval, fsl_flag)
     else:
-        bvec = read_bvec(inputBVecFile)
+        bvec = read_bvec(inputBVecFile, fsl_flag)
         output = do_func(
             output_flag,
             incremental_sorting_single_shell,
@@ -71,4 +73,4 @@ if __name__ == "__main__":
             time,
             output_flag,
         )
-        write_bvec(f"{root}{ext}", output)
+        write_bvec(f"{root}{ext}", output, fsl_flag)

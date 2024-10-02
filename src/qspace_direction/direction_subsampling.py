@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Usage:
-    direction_subsampling.py [-v | -q] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-t TIME] 
+    direction_subsampling.py [-v | -q] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-t TIME] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT  output file 
@@ -11,7 +11,8 @@ Options:
     -v, --verbose               output gurobi message
     -q, --quiet                 do not output gurobi message
     -a, --antipodal             treat antipolar points as same
-    -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
+    -t TIME, --time_limit TIME  maximum time to run milp algorithm    [default: 600]
+    --fslgrad,                  if set, program will read and write in fslgrad format
 
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
@@ -30,6 +31,8 @@ from io_util import read_bvec, write_bvec, do_func
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)
+
+    fsl_flag = True if arguments["--fslgrad"] else False
     inputFiles = arguments["--input"].split(",")
     numbers = list(map(int, arguments["--number"].split(",")))
     time = float(arguments["--time_limit"])
@@ -46,7 +49,7 @@ if __name__ == "__main__":
         assert (
             len(lb) == len(numbers) + 1
         ), "number of lower bounds and number of shells mismatch "
-    inputBvec = [read_bvec(f) for f in inputFiles]
+    inputBvec = [read_bvec(f, fsl_flag) for f in inputFiles]
 
     if len(inputBvec) == 1:
         if len(numbers) == 1:
@@ -85,8 +88,8 @@ if __name__ == "__main__":
 
     if len(inputBvec) == 1 and len(numbers) == 1:
         realPath = f"{root}{ext}"
-        write_bvec(realPath, output[0])
+        write_bvec(realPath, output[0], fsl_flag)
     else:
         for i, points in enumerate(output):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, points)
+            write_bvec(realPath, points, fsl_flag)
