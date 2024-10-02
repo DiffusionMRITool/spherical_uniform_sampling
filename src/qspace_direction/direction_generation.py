@@ -6,8 +6,8 @@ Usage:
 Options:
     -o OUTPUT, --output OUTPUT  output file 
     -n NUMBER, --number NUMBER  number chosen from each shell
-    -v, --verbose               output gurobi message
-    -q, --quiet                 do not output gurobi message
+    -v, --verbose               output message
+    -q, --quiet                 do not output message
     -i INIT, --initialization INIT     if set, use this file as initialization for CNLO algorithm, else use GEEM as initialization by default
     -a, --asym                  If set, the orientation is not antipodal symmetric 
     --max_iter ITER  Maximum iteration rounds for optimization    [default: 1000]
