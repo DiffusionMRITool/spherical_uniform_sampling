@@ -11,6 +11,10 @@ Note that you will need to acquire a license to use GUROBI for solving discrete 
 + https://pypi.org/project/gurobipy/
 + https://www.gurobi.com/academia/academic-program-and-licenses/
 + https://www.gurobi.com/free-trial/
+3. Install package
+```
+python setup.py install
+```
 
 ### Quick-start tutorial 
 
@@ -20,17 +24,17 @@ For a example single shell sampling pipeline, we will first generate a scheme wi
 
 1. Generate a sampling scheme
 ```bash
-python ./src/qspace_direction/direction_generation.py --output scheme.txt -n 30
+python -m qspace_direction.direction_generation --output scheme.txt -n 30
 ```
 
 2. Optimize the polarity of the resulting scheme
 ```bash
-python ./src/qspace_direction/direction_flip.py --input scheme.txt --output flipped.txt
+python -m qspace_direction.direction_flip --input scheme.txt --output flipped.txt
 ```
 
 3. Optimize the ordering of the resulting scheme
 ```bash
-python ./src/qspace_direction/direction_order.py flipped.txt --output flipped_ordered.txt
+python -m qspace_direction.direction_order flipped.txt --output flipped_ordered.txt
 ```
 
 You can check `flipped_ordered.txt` for the final result. 
@@ -39,12 +43,12 @@ For a example multiple shell sampling pipeline, we will first generate a scheme 
 
 1. Generate a multiple shell sampling scheme
 ```bash
-python ./src/qspace_direction/direction_generation.py --output scheme.txt -n 90,90,90
+python -m qspace_direction.direction_generation --output scheme.txt -n 90,90,90
 ```
 
 2. Optimize the polarity of the resulting schemes
 ```bash
-python ./src/qspace_direction/direction_flip.py --input scheme_shell0.txt,scheme_shell1.txt,scheme_shell2.txt --output flipped.txt 
+python -m qspace_direction.direction_flip --input scheme_shell0.txt,scheme_shell1.txt,scheme_shell2.txt --output flipped.txt 
 ```
 
 3. Optimize the polarity of the resulting schemes
@@ -61,7 +65,7 @@ perl -e '$count=90; while ($count>0) { print "1000\n"; $count--; }
 ```
 Finally we run our ordering script.
 ```bash
-python ./src/qspace_direction/direction_order.py bvec.txt bval.txt --output flipped_ordered.txt
+python -m qspace_direction.direction_order bvec.txt bval.txt --output flipped_ordered.txt
 ```
 
 ### License
