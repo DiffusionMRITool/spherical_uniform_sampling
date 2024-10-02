@@ -6,6 +6,16 @@ from .geem import optimize as geem_optimize
 
 
 def initialize(points_per_shell, antipodal, iprint=0) -> np.ndarray:
+    """use geem algorithm to generate initialization
+
+    Args:
+        points_per_shell (List[int]): number of points on each shell
+        antipodal (bool): whether or not considering antipodal constraint
+        iprint (int, optional): whether to output. Defaults to 0.
+
+    Returns:
+        array shape (K, 3), where K is the total number of points
+    """
     nb_shells = len(points_per_shell)
     K = np.sum(points_per_shell)
 

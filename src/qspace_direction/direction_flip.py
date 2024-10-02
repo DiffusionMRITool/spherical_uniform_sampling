@@ -16,10 +16,10 @@ import os
 
 from docopt import docopt
 from sampling import (
-    dirflip_SC,
-    dirflip_EEM,
-    dirflip_multi_shell_SC,
-    dirflip_multi_shell_EEM,
+    milpflip_SC,
+    milpflip_EEM,
+    milp_multi_shell_SC,
+    milpflip_multi_shell_EEM,
 )
 from io_util import do_func, read_bvec, write_bvec
 
@@ -41,13 +41,13 @@ if __name__ == "__main__":
     criteria = arguments["--criteria"]
 
     if len(inputBvec) == 1:
-        method = dirflip_EEM if criteria == "ELECTROSTATIC" else dirflip_SC
+        method = milpflip_EEM if criteria == "ELECTROSTATIC" else milpflip_SC
         output = do_func(output_flag, method, inputBvec[0], time_limit=time)
     else:
         method = (
-            dirflip_multi_shell_EEM
+            milpflip_multi_shell_EEM
             if criteria == "ELECTROSTATIC"
-            else dirflip_multi_shell_SC
+            else milp_multi_shell_SC
         )
         output = do_func(output_flag, method, inputBvec, time_limit=time)
 

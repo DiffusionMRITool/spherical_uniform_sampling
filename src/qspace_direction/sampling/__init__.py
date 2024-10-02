@@ -6,10 +6,10 @@ from .subsample import (
     multiple_subset_from_multiple_set,
 )
 from .flip import (
-    dirflip_SC,
-    dirflip_EEM,
-    dirflip_multi_shell_SC,
-    dirflip_multi_shell_EEM,
+    milpflip_SC,
+    milpflip_EEM,
+    milp_multi_shell_SC,
+    milpflip_multi_shell_EEM,
 )
 from .packing_density import (
     incremental_sorting_single_shell,

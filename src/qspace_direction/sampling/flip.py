@@ -6,11 +6,21 @@ import numpy as np
 from gurobipy import GRB
 
 
-def dirflip_SC(
+def milpflip_SC(
     points: np.ndarray,
     time_limit=600,
     output_flag=1,
 ):
+    """Maximize seperation of a given single shell scheme by changing polarity of certain points on the sphere. This function optimizes covering radius as target function.
+
+    Args:
+        points (np.ndarray): A given single shell scheme
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        Array (N, 3): The resulting optimized sampling scheme.
+    """
     N = len(points)
     dis = np.arccos(np.clip(points @ points.T, -1, 1))
 
@@ -56,12 +66,23 @@ def dirflip_SC(
     return l
 
 
-def dirflip_EEM(
+def milpflip_EEM(
     points: np.ndarray,
     order=1,
     time_limit=600,
     output_flag=1,
-):
+):  
+    """Maximize seperation of a given single shell scheme by changing polarity of certain points on the sphere. This function optimizes electrastatic energy as target function.
+
+    Args:
+        points (np.ndarray): A given single shell scheme
+        order (int, optional): Order for electrastatic energy. Defaults to 1.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        Array (N, 3): The resulting optimized sampling scheme.
+    """
     N = len(points)
     dis = np.clip(points @ points.T, -1, 1)
     f = lambda x: 1 / ((1 - x) ** order)
@@ -109,12 +130,23 @@ def dirflip_EEM(
     return l
 
 
-def dirflip_multi_shell_SC(
+def milp_multi_shell_SC(
     points: List[np.ndarray],
     w=0.5,
     time_limit=600,
     output_flag=1,
 ):
+    """Maximize seperation of a given multiple shell scheme by changing polarity of certain points on the spheres. This function optimizes covering radius as target function.
+
+    Args:
+        points (np.ndarray): A given single shell scheme
+        w (float, optional): Balance for indivial shell and combined shell. Defaults to 0.5.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        List: The resulting optimized sampling scheme for each shell.
+    """
     N_s = [len(l) for l in points]
     S = len(points)
 
@@ -222,13 +254,25 @@ def dirflip_multi_shell_SC(
     return l
 
 
-def dirflip_multi_shell_EEM(
+def milpflip_multi_shell_EEM(
     points: List[np.ndarray],
     w=0.5,
     order=1,
     time_limit=600,
     output_flag=1,
 ):
+    """Maximize seperation of a given multiple shell scheme by changing polarity of certain points on the spheres. This function optimizes electrastatic energy as target function.
+
+    Args:
+        points (np.ndarray): A given single shell scheme
+        w (float, optional): Balance for indivial shell and combined shell. Defaults to 0.5.
+        order (int, optional): Order for electrastatic energy. Defaults to 1.
+        time_limit (int, optional): Time limit for GUROBI to run. Defaults to 600.
+        output_flag (int, optional): GUROBI output flag. Defaults to 1.
+
+    Returns:
+        List: The resulting optimized sampling scheme for each shell.
+    """
     N_s = [len(l) for l in points]
     S = len(points)
 
