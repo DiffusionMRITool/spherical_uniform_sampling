@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 """
-    Usage:
-        direction_flip.py [-v | -q] --input=INPUT --output=OUTPUT [-t TIME] [-c CRITERIA]
+Usage:
+    direction_flip.py [-v | -q] --input=INPUT --output=OUTPUT [-t TIME] [-c CRITERIA]
 
-    Options:
-        -o OUTPUT, --output OUTPUT  output file [default: ./output.txt]
-        -i INPUT, --input INPUT     input bvec files  
-        -v, --verbose               output gurobi message
-        -q, --quiet                 do not output gurobi message
-        -c CRITERIA, --criteria CRITERIA             Criteria Type(DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
-        -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
+Options:
+    -o OUTPUT, --output OUTPUT  output file [default: ./output.txt]
+    -i INPUT, --input INPUT     input bvec files  
+    -v, --verbose               output gurobi message
+    -q, --quiet                 do not output gurobi message
+    -c CRITERIA, --criteria CRITERIA             Criteria Type(DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
+    -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
 """
 import os
 

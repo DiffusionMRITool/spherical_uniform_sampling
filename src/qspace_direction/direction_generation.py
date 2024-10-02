@@ -1,16 +1,21 @@
 #!/usr/bin/env python
 """
-    Usage:
-        direction_generation.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] 
+Usage:
+    direction_generation.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] 
 
-    Options:
-        -o OUTPUT, --output OUTPUT  output file 
-        -n NUMBER, --number NUMBER  number chosen from each shell
-        -v, --verbose               output gurobi message
-        -q, --quiet                 do not output gurobi message
-        -i INIT, --initialization INIT     optimal initialization bvec files
-        -a, --asym                  If set, the orientation is not antipodal symmetric 
-        --max_iter ITER  Maximum iteration rounds for optimization    [default: 1000]
+Options:
+    -o OUTPUT, --output OUTPUT  output file 
+    -n NUMBER, --number NUMBER  number chosen from each shell
+    -v, --verbose               output gurobi message
+    -q, --quiet                 do not output gurobi message
+    -i INIT, --initialization INIT     if set, use this file as initialization for CNLO algorithm, else use GEEM as initialization by default
+    -a, --asym                  If set, the orientation is not antipodal symmetric 
+    --max_iter ITER  Maximum iteration rounds for optimization    [default: 1000]
+
+Reference:
+    1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
+    1. Caruyer, Emmanuel, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.
+    2. Caruyer, Emmanuel, and Rachid Deriche. "Diffusion MRI signal reconstruction with continuity constraint and optimal regularization." Medical Image Analysis 16, no. 6 (2012): 1113-1120.
 """
 import os
 
