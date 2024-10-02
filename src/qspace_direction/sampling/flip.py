@@ -19,7 +19,7 @@ def milpflip_SC(
         output_flag (int, optional): GUROBI output flag. Defaults to 1.
 
     Returns:
-        Array (N, 3): The resulting optimized sampling scheme.
+        Array: Array shaped (N, 3), the resulting optimized sampling scheme.
     """
     N = len(points)
     dis = np.arccos(np.clip(points @ points.T, -1, 1))
@@ -81,7 +81,7 @@ def milpflip_EEM(
         output_flag (int, optional): GUROBI output flag. Defaults to 1.
 
     Returns:
-        Array (N, 3): The resulting optimized sampling scheme.
+        Array: Array shaped (N, 3), the resulting optimized sampling scheme.
     """
     N = len(points)
     dis = np.clip(points @ points.T, -1, 1)

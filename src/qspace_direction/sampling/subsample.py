@@ -123,7 +123,7 @@ def single_subset_from_single_set(
         output_flag (int, optional): GUROBI output flag. Defaults to 1.
 
     Returns:
-        Array (K, 3): The chosen K points
+        Array: Array shaped (K, 3), the chosen K points
     """
     N = len(points)
     M = 2
