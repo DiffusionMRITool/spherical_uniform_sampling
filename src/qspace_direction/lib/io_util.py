@@ -64,7 +64,8 @@ def write_bvec(filename: str, bvec: np.ndarray, fsl_flag=False):
         fsl_flag (bool, optional): Whether to write in fsl format. Defaults to False.
     """
     with open(filename, "w") as f:
-        bvec = list(zip(*bvec))
+        if fsl_flag:
+            bvec = list(zip(*bvec))
         f.writelines(map(lambda x: f"{' '.join(map(str, x))}\n", bvec))
 
 

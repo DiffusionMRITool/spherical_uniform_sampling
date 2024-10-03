@@ -5,7 +5,7 @@ from .geem import compute_weights
 from .geem import optimize as geem_optimize
 
 
-def initialize(points_per_shell, antipodal, iprint=0) -> np.ndarray:
+def initialize(points_per_shell, antipodal) -> np.ndarray:
     """use geem algorithm to generate initialization
 
     Args:
@@ -31,7 +31,6 @@ def initialize(points_per_shell, antipodal, iprint=0) -> np.ndarray:
         weights,
         antipodal=antipodal,
         max_iter=1000,
-        iprint=iprint,
     )
 
     return points
@@ -449,7 +448,7 @@ def cnlo_optimize(
     nb_points = np.sum(points_per_shell)
     nb_shells = len(points_per_shell)
     if initialization is None:
-        initialization = initialize(points_per_shell, antipodal, iprint)
+        initialization = initialize(points_per_shell, antipodal)
     upper_bound_spherical = covering_radius_upper_bound(
         2 * np.array(points_per_shell) if antipodal else np.array(points_per_shell)
     )

@@ -13,7 +13,7 @@ Note that you will need to acquire a license to use GUROBI for solving discrete 
 + https://www.gurobi.com/free-trial/
 3. Install package
 ```
-python setup.py install
+pip install .
 ```
 
 ### Quick-start tutorial 
