@@ -287,6 +287,7 @@ def incremental_sorting_single_shell(
     picked_points = []
     remained_points = points
     flag = 0
+    eps = 1e-6
 
     for num, t in zip(points_per_split, time_limit):
         remained_points = greedy_sorting([remained_points], start=picked_points)[0]
@@ -307,7 +308,7 @@ def incremental_sorting_single_shell(
         flag = 1
         exclude = []
         for l in remained_points:
-            if l not in pick:
+            if not any(all(np.abs(l - k) < eps) for k in pick):
                 exclude.append(l)
         picked_points = (
             np.concatenate([picked_points, pick]) if len(picked_points) > 0 else pick
