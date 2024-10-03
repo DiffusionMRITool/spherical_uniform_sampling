@@ -20,11 +20,11 @@ Options:
     --fslgrad                         If set, program will read and write in fslgrad format
 
 Example:
-    # Generate and optimze a 30 sampling scheme points scheme without b-value
+    # Generate and optimze a single shell sampling scheme with 30 points without b-value
     direction_generation.py --output scheme.txt -n 30
-    # Generate and optimze a 30 points sampling scheme with a single b-value 1000
+    # Generate and optimze a single shell points sampling with a single b-value 1000
     direction_generation.py --output scheme.txt -n 30 --bval 1000
-    # Generate and optimze a 90x3 points sampling scheme with each shell having b-value 1000, 2000 and 3000
+    # Generate and optimze a multiple shell sampling scheme with 90x3, and each shell having b-value 1000, 2000 and 3000
     direction_generation.py --output scheme.txt -n 90,90,90 --bval 1000,2000,3000   
 
 Reference:

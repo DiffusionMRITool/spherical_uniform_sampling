@@ -20,6 +20,8 @@ pip install .
 
 You can check CLI program with option `-h` for help message.
 
+### Single shell example
+
 For a example single shell sampling pipeline, we will first generate a scheme with 30 points and then apply flipping and ordering to it.
 
 This can be done by simply invoke
@@ -45,18 +47,20 @@ direction_order.py flipped.txt --output flipped_ordered.txt
 
 You can check `flipped_ordered.txt` for the final result. 
 
-For a example multiple shell sampling pipeline, we will first generate a scheme with $90\times 3$ points and then apply flipping and ordering to it.
+### Multiple shell example
+
+For a example multiple shell sampling pipeline, we will first generate a scheme with $30\times 3$ points and then apply flipping and ordering to it.
 
 This can be done by simply invoke
 ```bash
-direction_generation.py --output scheme.txt -n 90,90,90 --bval 1000,2000,3000
+direction_generation.py --output flipped_ordered.txt -n 30,30,30 --bval 1000,2000,3000
 ```
 
 Alternately, it is equivalent to following step-by-step instructions
 
 1. Generate a multiple shell sampling scheme
 ```bash
-direction_continous_optimization.py --output flipped_ordered.txt -n 90,90,90
+direction_continous_optimization.py --output scheme.txt -n 30,30,30
 ```
 
 2. Optimize the polarity of the resulting schemes
@@ -76,4 +80,4 @@ direction_order.py combine_bvec.txt combine_bval.txt --output flipped_ordered.tx
 ```
 
 ### License
-This project is licensed under the [CC-BY-NC-4.0](LICENSE.md).
+This project is licensed under the [MIT LICENSE](LICENSE).
