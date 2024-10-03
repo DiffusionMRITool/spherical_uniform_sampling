@@ -28,13 +28,8 @@ import os
 import numpy as np
 from docopt import docopt
 
-from qspace_direction.lib.io_util import (
-    arg_bool,
-    arg_values,
-    do_func,
-    read_bvec,
-    write_bvec,
-)
+from qspace_direction.lib.io_util import (arg_bool, arg_values, do_func,
+                                          read_bvec, write_bvec)
 from qspace_direction.sampling.geem import compute_weights
 from qspace_direction.sampling.geem import optimize as geem_optimize
 

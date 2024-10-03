@@ -50,8 +50,9 @@ with continuity constraint and optimal regularization." Medical Image Analysis
 """
 
 from __future__ import division
-from scipy import optimize as scopt
+
 import numpy as np
+from scipy import optimize as scopt
 
 
 def equality_constraints(vects, *args):

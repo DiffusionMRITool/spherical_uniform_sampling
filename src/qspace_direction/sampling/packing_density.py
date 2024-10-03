@@ -5,7 +5,8 @@ import gurobipy as gp
 import numpy as np
 from gurobipy import GRB
 
-from .cnlo import covering_radius, covering_radius_upper_bound
+from .loss import (covering_radius, covering_radius_upper_bound,
+                   packing_density_loss)
 
 
 def greedy_sorting_init(points: List[np.ndarray], init: int, start: List[np.ndarray]):
@@ -55,25 +56,6 @@ def greedy_sorting_init(points: List[np.ndarray], init: int, start: List[np.ndar
         result.append(np.array(li))
 
     return result
-
-
-def packing_density_loss(vects: np.ndarray, start: np.ndarray):
-    """Packing density increment of points after appending vects to start
-
-    Args:
-        vects (np.ndarray): Points to calculate packing density
-        start (np.ndarray): Existing points
-
-    Returns:
-        float: Loss value
-    """
-    cons = np.concatenate([start, vects]) if len(start) > 0 else vects
-    return np.sum(
-        [
-            (1 - np.cos(covering_radius(cons[:k]))) / 2 * (k + len(start))
-            for k in range(1, len(vects) + 1)
-        ]
-    )
 
 
 def greedy_sorting(points: List[np.ndarray], start: List[np.ndarray]):

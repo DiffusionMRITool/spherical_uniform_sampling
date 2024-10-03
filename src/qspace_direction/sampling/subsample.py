@@ -5,7 +5,7 @@ import gurobipy as gp
 import numpy as np
 from gurobipy import GRB
 
-from .cnlo import covering_radius_upper_bound
+from .loss import covering_radius_upper_bound
 
 
 def identity(x):
