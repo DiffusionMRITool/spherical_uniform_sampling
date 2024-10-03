@@ -31,24 +31,24 @@ Reference:
 """
 
 import os
+import shutil
+import uuid
 
 import numpy as np
 from docopt import docopt
-import uuid
-import shutil
 
-from .lib import write_bval
+from .combine_bvec_bval import main as combine_main
 from .direction_continous_optimization import main as continous_main
 from .direction_flip import main as flip_main
 from .direction_order import main as order_main
-from .combine_bvec_bval import main as combine_main
+from .lib import write_bval
 
 
 def main(arguments: dict):
     # create a temporary directory and work in it
     rd_path = "tmp" + str(uuid.uuid4())
     os.mkdir(rd_path)
-    l = len(arguments["--number"].split(','))
+    l = len(arguments["--number"].split(","))
     if l == 1:
         output = arguments["--output"]
         arguments["--output"] = os.path.join(rd_path, "scheme.txt")
@@ -61,7 +61,11 @@ def main(arguments: dict):
 
         if arguments["--bval"]:
             bval = arguments["--bval"]
-            write_bval(os.path.join(rd_path, "bval.txt"), [bval] * int(arguments["--number"]), arguments["--fslgrad"])
+            write_bval(
+                os.path.join(rd_path, "bval.txt"),
+                [bval] * int(arguments["--number"]),
+                arguments["--fslgrad"],
+            )
             arguments["BVAL"] = os.path.join(rd_path, "bval.txt")
         else:
             arguments["BVAL"] = None
@@ -74,12 +78,16 @@ def main(arguments: dict):
         arguments["--asym"] = None
         continous_main(arguments)
 
-        arguments["--input"] = ','.join(os.path.join(rd_path, f"scheme_shell{i}.txt") for i in range(l))
+        arguments["--input"] = ",".join(
+            os.path.join(rd_path, f"scheme_shell{i}.txt") for i in range(l)
+        )
         arguments["--output"] = os.path.join(rd_path, "flipped.txt")
         flip_main(arguments)
-        
+
         assert arguments["--bval"], "Must set --bval for each shell!"
-        arguments["BVEC"] = ','.join(os.path.join(rd_path, f"flipped_shell{i}.txt") for i in range(l))
+        arguments["BVEC"] = ",".join(
+            os.path.join(rd_path, f"flipped_shell{i}.txt") for i in range(l)
+        )
         arguments["BVAL"] = arguments["--bval"]
         arguments["--output"] = os.path.join(rd_path, "combine.txt")
         combine_main(arguments)
@@ -89,6 +97,7 @@ def main(arguments: dict):
         arguments["--output"] = output
         order_main(arguments)
     shutil.rmtree(rd_path)
+
 
 if __name__ == "__main__":
 
