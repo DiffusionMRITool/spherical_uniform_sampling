@@ -12,7 +12,7 @@ Options:
 
 Examples:
     # different bvec and bval must be seperated with a comma and without any space
-    python -m qspace_direction.combine_bvec_bval bvec_shell0.txt,bvec_shell0.txt,bvec_shell0.txt 1000,2000,3000 --output ordered.txt
+    combine_bvec_bval.py bvec_shell0.txt,bvec_shell0.txt,bvec_shell0.txt 1000,2000,3000 --output ordered.txt
 """
 import os
 

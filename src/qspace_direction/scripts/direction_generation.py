@@ -21,11 +21,11 @@ Options:
 
 Example:
     # Generate and optimze a 30 sampling scheme points scheme without b-value
-    python -m qspace_direction.direction_generation --output scheme.txt -n 30
+    direction_generation.py --output scheme.txt -n 30
     # Generate and optimze a 30 points sampling scheme with a single b-value 1000
-    python -m qspace_direction.direction_generation --output scheme.txt -n 30 --bval 1000
+    direction_generation.py --output scheme.txt -n 30 --bval 1000
     # Generate and optimze a 90x3 points sampling scheme with each shell having b-value 1000, 2000 and 3000
-    python -m qspace_direction.direction_generation --output scheme.txt -n 90,90,90 --bval 1000,2000,3000   
+    direction_generation.py --output scheme.txt -n 90,90,90 --bval 1000,2000,3000   
 
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199

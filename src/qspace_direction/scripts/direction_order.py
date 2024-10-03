@@ -17,9 +17,9 @@ Options:
 
 Examples:
     # Optimize the order of a single shell sampling scheme with bvec.txt
-    python -m qspace_direction.direction_order bvec.txt --output ordered.txt
+    direction_order.py bvec.txt --output ordered.txt
     # Optimize the order of a sampling scheme with bvec and bval. This works for both single and multiple shell case.
-    python -m qspace_direction.direction_order bvec.txt bval.txt --output ordered.txt
+    direction_order.py bvec.txt bval.txt --output ordered.txt
 """
 import os
 

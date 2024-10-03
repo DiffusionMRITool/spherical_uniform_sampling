@@ -17,9 +17,9 @@ Options:
 
 Example:
     # Generate a 30 points single shell sampling scheme
-    python -m qspace_direction.generation_geem --output bvec.txt -n 30
+    generation_geem.py --output bvec.txt -n 30
     # Generate a 90x3 points multiple shell sampling scheme
-    python -m qspace_direction.generation_geem --output bvec.txt -n 90,90,90    
+    generation_geem.py --output bvec.txt -n 90,90,90    
 
 Reference:
     1. Emmanuel Caruyer, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.

@@ -17,9 +17,9 @@ Options:
 
 Examples: 
     # Optimize the polarity of a single shell scheme
-    python -m qspace_direction.direction_flip --input bvec.txt --output flipped.txt
+    direction_flip.py --input bvec.txt --output flipped.txt
     # Optimize the polarity of a multiple shell scheme
-    python -m qspace_direction.direction_flip --input bvec_shell0.txt,bvec_shell1.txt,bvec_shell2.txt --output flipped.txt 
+    direction_flip.py --input bvec_shell0.txt,bvec_shell1.txt,bvec_shell2.txt --output flipped.txt 
 """
 import os
 
