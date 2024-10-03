@@ -45,7 +45,7 @@ def read_bvec_bval(bvec_file: str, bval_file: str, fsl_flag=False):
         if fsl_flag:
             bval = list(map(int, lines[0].split()))
         else:
-            bval = [int(l) for l in lines]
+            bval = [float(l) for l in lines]
     d = defaultdict(list)
     for val, vec in zip(bval, bvec):
         d[val].append(vec)

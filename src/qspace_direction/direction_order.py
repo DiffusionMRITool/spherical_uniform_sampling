@@ -10,7 +10,7 @@ Usage:
 Options:
     -o OUTPUT, --output OUTPUT  Output file 
     -v, --verbose               Output gurobi message
-    -n NUM, --number NUM        Number of points per split. [default: 3]
+    -s SPLIT, --split SPLIT     Number of points per split for order optimization. [default: 3]
     -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
     --fslgrad                   If set, program will read and write in fslgrad format
@@ -46,7 +46,7 @@ def main(arguments):
 
     output_flag = 1 if arguments["--verbose"] else 0
 
-    num = int(arguments["--number"])
+    num = int(arguments["--split"])
 
     weight = float(arguments["--weight"])
 
@@ -66,7 +66,7 @@ def main(arguments):
                 time,
                 output_flag,
             )
-            bval = [bvalues[0] for _ in range(len(bvecs))]
+            bval = [bvalues[0] for _ in range(len(bvecs[0]))]
         else:
             bvec, bval = do_func(
                 output_flag,
