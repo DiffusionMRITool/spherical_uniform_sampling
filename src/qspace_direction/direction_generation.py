@@ -21,6 +21,7 @@ Options:
 
 Example:
     python -m qspace_direction.direction_generation --output scheme.txt -n 30
+    python -m qspace_direction.direction_generation --output scheme.txt -n 30 --bval 1000
     python -m qspace_direction.direction_generation --output scheme.txt -n 90,90,90 --bval 1000,2000,3000   
 
 Reference:
@@ -33,26 +34,64 @@ import os
 
 import numpy as np
 from docopt import docopt
+import uuid
+import shutil
 
-from .lib import do_func, read_bvec, write_bvec
-from .sampling import cnlo_optimize
+from .lib import write_bval
+from .direction_continous_optimization import main as continous_main
+from .direction_flip import main as flip_main
+from .direction_order import main as order_main
+from .combine_bvec_bval import main as combine_main
+
+
+def main(arguments: dict):
+    # create a temporary directory and work in it
+    rd_path = "tmp" + str(uuid.uuid4())
+    os.mkdir(rd_path)
+    l = len(arguments["--number"].split(','))
+    if l == 1:
+        output = arguments["--output"]
+        arguments["--output"] = os.path.join(rd_path, "scheme.txt")
+        arguments["--asym"] = None
+        continous_main(arguments)
+
+        arguments["--input"] = os.path.join(rd_path, "scheme.txt")
+        arguments["--output"] = os.path.join(rd_path, "flipped.txt")
+        flip_main(arguments)
+
+        if arguments["--bval"]:
+            bval = arguments["--bval"]
+            write_bval(os.path.join(rd_path, "bval.txt"), [bval] * int(arguments["--number"]), arguments["--fslgrad"])
+            arguments["BVAL"] = os.path.join(rd_path, "bval.txt")
+        else:
+            arguments["BVAL"] = None
+        arguments["BVEC"] = os.path.join(rd_path, "flipped.txt")
+        arguments["--output"] = output
+        order_main(arguments)
+    else:
+        output = arguments["--output"]
+        arguments["--output"] = os.path.join(rd_path, "scheme.txt")
+        arguments["--asym"] = None
+        continous_main(arguments)
+
+        arguments["--input"] = ','.join(os.path.join(rd_path, f"scheme_shell{i}.txt") for i in range(l))
+        arguments["--output"] = os.path.join(rd_path, "flipped.txt")
+        flip_main(arguments)
+        
+        assert arguments["--bval"], "Must set --bval for each shell!"
+        arguments["BVEC"] = ','.join(os.path.join(rd_path, f"flipped_shell{i}.txt") for i in range(l))
+        arguments["BVAL"] = arguments["--bval"]
+        arguments["--output"] = os.path.join(rd_path, "combine.txt")
+        combine_main(arguments)
+
+        arguments["BVEC"] = os.path.join(rd_path, "combine_bvec.txt")
+        arguments["BVAL"] = os.path.join(rd_path, "combine_bval.txt")
+        arguments["--output"] = output
+        order_main(arguments)
+    shutil.rmtree(rd_path)
 
 if __name__ == "__main__":
+
     arguments = docopt(__doc__)
 
-    fsl_flag = True if arguments["--fslgrad"] else False
-    initVecs = None
-    if arguments["--initialization"]:
-        fileList = arguments["--initialization"].split(",")
-        initVecs = np.concatenate([read_bvec(name, fsl_flag) for name in fileList])
-
-    numbers = list(map(int, arguments["--number"].split(",")))
-
-    num_iter = int(arguments["--max_iter"])
-
-    output_flag = 1 if arguments["--verbose"] else 0
-
-    antipodal = False if arguments["--asym"] else True
-
-    outputFile = arguments["--output"]
-    root, ext = os.path.splitext(outputFile)
+    main(arguments)
