@@ -10,7 +10,7 @@ Options:
     -o OUTPUT, --output OUTPUT        Output file
     -i INPUT, --input INPUT           Input bvec files  
     -v, --verbose                     Output gurobi message
-    -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
+    -w WEIGHT, --weight WEIGHT        Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -c CRITERIA, --criteria CRITERIA  Criteria type (DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
     -t TIME, --time_limit TIME        Maximum time to run milp algorithm    [default: 600]
     --fslgrad                         If set, program will read and write in fslgrad format

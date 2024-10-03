@@ -65,8 +65,8 @@ def electrostatic_energy(
 
     Returns
     -------
-    _type_
-        _description_
+    float
+        electrostatic energy
     """
     epsilon = 1e-9
     N = len(vects)
