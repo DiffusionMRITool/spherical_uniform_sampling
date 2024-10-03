@@ -80,4 +80,4 @@ direction_order.py combine_bvec.txt combine_bval.txt --output flipped_ordered.tx
 ```
 
 ### License
-This project is licensed under the [MIT LICENSE](LICENSE).
+This project is licensed under the [LICENSE](LICENSE).
