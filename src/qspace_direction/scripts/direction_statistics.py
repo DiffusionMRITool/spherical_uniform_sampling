@@ -29,7 +29,7 @@ from qspace_direction.lib.io_util import arg_bool, arg_values, read_bvec, read_b
 from qspace_direction.sampling.loss import (
     covering_radius,
     electrostatic_energy,
-    f_multi_shell,
+    weighted_cost_multi_shell,
     norm_of_mean,
 )
 
@@ -49,13 +49,13 @@ def display_bvec_stat_combined(bvec, order, antipodal, weight):
     cr = covering_radius(np.concatenate(bvec), antipodal)
     print(f"Covering radius = {cr * 180 / np.pi:.4f}°, radian = {cr:.6f}")
     print(
-        f"Weighted covering radius = {f_multi_shell(bvec, covering_radius, weight, antipodal):.6f}"
+        f"Weighted covering radius = {weighted_cost_multi_shell(bvec, covering_radius, weight, antipodal):.6f}"
     )
     print(
         f"Electrastatics energy (order={order}) = {electrostatic_energy(np.concatenate(bvec), order, antipodal):.6f}"
     )
     print(
-        f"Weighted electrastatics energy (order={order}) = {f_multi_shell(bvec, electrostatic_energy, weight, order, antipodal):.6f}"
+        f"Weighted electrastatics energy (order={order}) = {weighted_cost_multi_shell(bvec, electrostatic_energy, weight, order, antipodal):.6f}"
     )
     print(f"Norm of mean direction vector = {norm_of_mean(np.concatenate(bvec)):.6f}\n")
 

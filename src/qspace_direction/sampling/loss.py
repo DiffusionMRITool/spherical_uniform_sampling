@@ -31,8 +31,18 @@ def covering_radius(vects: np.ndarray, antipodal=True):
     return np.arccos((np.clip(np.max(np.triu(innerProductAll, 1)), -1, 1)))
 
 
-def f_multi_shell(vects, f, w, *args, **kargs):
-    return w / len(vects) * sum(f(v, *args, **kargs) for v in vects) + (1 - w) * f(
+def weighted_cost_multi_shell(vects, cost, w, *args, **kargs):
+    """Calucalte weighted cost of each individual shell and combined shell
+
+    Args:
+        vects (List[np.ndarray]): point set on each shell
+        cost : cost function
+        w (float): weight for single shell term, 1-weight for mutiple shell term
+
+    Returns:
+        float: weighted cost
+    """
+    return w / len(vects) * sum(cost(v, *args, **kargs) for v in vects) + (1 - w) * cost(
         np.concatenate(vects), *args, **kargs
     )
 
