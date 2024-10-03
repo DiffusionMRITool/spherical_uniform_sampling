@@ -18,14 +18,13 @@ import os
 
 from docopt import docopt
 
-from .lib import combine_bvec_bval, read_bvec, write_bval, write_bvec
+from qspace_direction.lib.io_util import arg_bool, arg_values, combine_bvec_bval, read_bvec, write_bval, write_bvec
 
 
 def main(arguments):
-    fsl_flag = True if arguments["--fslgrad"] else False
-    inputBVecFiles = arguments["BVEC"]
-    bvecs = [read_bvec(f, fsl_flag) for f in inputBVecFiles.split(",")]
-    bvals = list(map(float, arguments["BVAL"].split(",")))
+    fsl_flag = arg_bool(arguments["--fslgrad"], bool)
+    bvecs = arg_values(arguments["BVEC"], lambda f: read_bvec(f, fsl_flag))
+    bvals = arg_values(arguments["BVAL"], float)
 
     assert len(bvecs) == len(
         bvals

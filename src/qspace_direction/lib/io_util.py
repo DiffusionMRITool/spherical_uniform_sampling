@@ -89,8 +89,8 @@ def combine_bvec_bval(bvec: List[np.ndarray], bval: List[float]):
     """Combine list of bvec and bval into a single list
 
     Args:
-    bvec (List[np.ndarray]): list of b-vectors
-    bval (List[float]): list of b-values
+        bvec (List[np.ndarray]): list of b-vectors
+        bval (List[float]): list of b-values
 
     Returns:
         (np.ndarray, list[float]): A single list of bvecs and bvals
@@ -98,6 +98,39 @@ def combine_bvec_bval(bvec: List[np.ndarray], bval: List[float]):
     N_s = [len(l) for l in bvec]
     bvalList = sum(([b for _ in range(n_s)] for n_s, b in zip(N_s, bval)), [])
     return np.concatenate(bvec), bvalList
+
+
+def arg_values(value, typefunc):
+    """split comma seperated value and convert them using typefunc
+
+    Args:
+        value (Any): value
+        typefunc : conversion function
+
+    Returns:
+        result
+    """
+    value = value.strip()
+    if value[0]=='(' and value[-1]==')':
+        value = value[1:-1]
+    values = value.split(',')
+    return list(map(typefunc, values))
+
+
+def arg_bool(value, typefunc):
+    """change value into typefunc bool
+
+    Args:
+        value (Any): value
+        typefunc : conversion function
+
+    Returns:
+        result
+    """
+    if value:
+        return typefunc(1)
+    else:
+        return typefunc(0)
 
 
 def do_func(flag: bool, f, *args, **kwargs):

@@ -23,7 +23,7 @@ import os
 
 from docopt import docopt
 
-from .lib import do_func, read_bvec, read_bvec_bval, write_bval, write_bvec
+from .lib import do_func, read_bvec, read_bvec_bval, write_bval, write_bvec,arg_bool, arg_values
 from .sampling import incremental_sorting_multi_shell, incremental_sorting_single_shell
 
 
@@ -39,16 +39,16 @@ def gen_split(num_per_split: int, n: int):
 
 
 def main(arguments):
-    fsl_flag = True if arguments["--fslgrad"] else False
+    fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     inputBVecFile = arguments["BVEC"]
 
-    time = float(arguments["--time_limit"])
+    time = arg_values(arguments["--time_limit"], float)
 
-    output_flag = 1 if arguments["--verbose"] else 0
+    output_flag = arg_bool(arguments["--verbose"], int)
 
-    num = int(arguments["--split"])
+    num = arg_values(arguments["--split"], int)
 
-    weight = float(arguments["--weight"])
+    weight = arg_values(arguments["--weight"], float)
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)

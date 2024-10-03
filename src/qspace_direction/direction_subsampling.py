@@ -29,6 +29,8 @@ import os
 import numpy as np
 from docopt import docopt
 
+from qspace_direction.lib.io_util import arg_bool, arg_values
+
 from .lib import do_func, read_bvec, write_bvec
 from .sampling import (
     multiple_subset_from_multiple_set,
@@ -38,14 +40,14 @@ from .sampling import (
 
 
 def main(arguments):
-    fsl_flag = True if arguments["--fslgrad"] else False
-    inputFiles = arguments["--input"].split(",")
-    numbers = list(map(int, arguments["--number"].split(",")))
-    time = float(arguments["--time_limit"])
-    output_flag = 1 if arguments["--verbose"] else 0
+    fsl_flag = arg_bool(arguments["--fslgrad"], bool)
+    numbers = arg_values(arguments["--number"], int)
+    time = arg_values(arguments["--time_limit"], float)
+    output_flag = arg_bool(arguments["--verbose"], int)
+
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)
-    antipodal = arguments["--antipodal"]
+    antipodal = not arg_bool(arguments["--asym"], bool)
     lb = (
         None
         if arguments["--lower_bound"] is None
@@ -55,7 +57,7 @@ def main(arguments):
         assert (
             len(lb) == len(numbers) + 1
         ), "number of lower bounds and number of shells mismatch "
-    inputBvec = [read_bvec(f, fsl_flag) for f in inputFiles]
+    inputBvec = arg_values(arguments["--input"], lambda f: read_bvec(f, fsl_flag))
 
     if len(inputBvec) == 1:
         if len(numbers) == 1:

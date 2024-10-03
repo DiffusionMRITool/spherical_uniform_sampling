@@ -29,24 +29,24 @@ import os
 import numpy as np
 from docopt import docopt
 
-from .lib import do_func, read_bvec, write_bvec
+from qspace_direction.lib.io_util import arg_bool,arg_values,do_func, read_bvec, write_bvec
+
 from .sampling import cnlo_optimize
 
 
 def main(arguments):
-    fsl_flag = True if arguments["--fslgrad"] else False
+    fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     initVecs = None
     if arguments["--initialization"]:
-        fileList = arguments["--initialization"].split(",")
-        initVecs = np.concatenate([read_bvec(name, fsl_flag) for name in fileList])
+        initVecs = np.concatenate(arg_values(arguments["--initialization"], lambda f: read_bvec(f, fsl_flag)))
 
-    numbers = list(map(int, arguments["--number"].split(",")))
+    numbers = arg_values(arguments["--number"], int)
 
-    num_iter = int(arguments["--max_iter"])
+    num_iter = arg_values(arguments["--max_iter"], int)
 
-    output_flag = 1 if arguments["--verbose"] else 0
+    output_flag = arg_bool(arguments["--verbose"], int)
 
-    antipodal = False if arguments["--asym"] else True
+    antipodal = not arg_bool(arguments["--asym"], bool)
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)

@@ -22,7 +22,8 @@ import os
 
 from docopt import docopt
 
-from .lib import do_func, read_bvec, write_bvec
+from qspace_direction.lib.io_util import arg_bool, arg_values,do_func, read_bvec, write_bvec
+
 from .sampling import (
     milp_multi_shell_SC,
     milpflip_EEM,
@@ -32,13 +33,12 @@ from .sampling import (
 
 
 def main(arguments):
-    fsl_flag = True if arguments["--fslgrad"] else False
-    inputFiles = arguments["--input"].split(",")
-    inputBvec = [read_bvec(f, fsl_flag) for f in inputFiles]
+    fsl_flag = arg_bool(arguments["--fslgrad"], bool)
+    inputBvec = arg_values(arguments["--input"], lambda f: read_bvec(f, fsl_flag))
 
-    time = float(arguments["--time_limit"])
+    time = arg_values(arguments["--time_limit"], float)
 
-    output_flag = 1 if arguments["--verbose"] else 0
+    output_flag = arg_bool(arguments["--verbose"], int)
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)
