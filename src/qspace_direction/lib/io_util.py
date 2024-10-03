@@ -100,12 +100,13 @@ def combine_bvec_bval(bvec: List[np.ndarray], bval: List[float]):
     return np.concatenate(bvec), bvalList
 
 
-def arg_values(value, typefunc, is_single: False):
+def arg_values(value, typefunc, is_single=False):
     """split comma seperated value and convert them using typefunc
 
     Args:
         value (Any): value
         typefunc : conversion function
+        is_single (bool) : whether to choose value as a single item rather than list
 
     Returns:
         result
