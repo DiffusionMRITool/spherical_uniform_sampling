@@ -62,7 +62,7 @@ def main(arguments):
                 output_flag,
                 incremental_sorting_single_shell,
                 bvecs[0],
-                gen_split(num, len(bvecs)),
+                gen_split(num, len(bvecs[0])),
                 time,
                 output_flag,
             )
