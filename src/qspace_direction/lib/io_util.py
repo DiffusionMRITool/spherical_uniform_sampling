@@ -84,6 +84,21 @@ def write_bval(filename: str, bval: List[int], fsl_flag=False):
             f.writelines(map(lambda x: f"{x}\n", bval))
 
 
+def combine_bvec_bval(bvec: List[np.ndarray], bval: List[float]):
+    """Combine list of bvec and bval into a single list
+
+    Args:
+    bvec (List[np.ndarray]): list of b-vectors
+    bval (List[float]): list of b-values
+
+    Returns:
+        (np.ndarray, list[float]): A single list of bvecs and bvals
+    """
+    N_s = [len(l) for l in bvec]
+    bvalList = sum(([b for _ in range(n_s)] for n_s, b in zip(N_s, bval)), [])
+    return np.concatenate(bvec), bvalList
+
+
 def do_func(flag: bool, f, *args, **kwargs):
     """execute and return f(*args, **kwargs), and optionally redirect output to devnull
 
