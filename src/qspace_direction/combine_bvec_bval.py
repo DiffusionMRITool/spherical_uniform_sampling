@@ -15,18 +15,22 @@ Examples:
     python -m qspace_direction.combine_bvec_bval bvec_shell0.txt,bvec_shell0.txt,bvec_shell0.txt 1000,2000,3000 --output ordered.txt
 """
 import os
+
 from docopt import docopt
-from .lib import read_bvec, combine_bvec_bval, write_bvec, write_bval
+
+from .lib import combine_bvec_bval, read_bvec, write_bval, write_bvec
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)
 
     fsl_flag = True if arguments["--fslgrad"] else False
     inputBVecFiles = arguments["BVEC"]
-    bvecs = [read_bvec(f, fsl_flag) for f in inputBVecFiles.split(',')]
-    bvals = list(map(float, arguments["BVAL"].split(',')))
+    bvecs = [read_bvec(f, fsl_flag) for f in inputBVecFiles.split(",")]
+    bvals = list(map(float, arguments["BVAL"].split(",")))
 
-    assert len(bvecs) == len(bvals), "Number of bvec shell and number of bvals don't match!"
+    assert len(bvecs) == len(
+        bvals
+    ), "Number of bvec shell and number of bvals don't match!"
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)
