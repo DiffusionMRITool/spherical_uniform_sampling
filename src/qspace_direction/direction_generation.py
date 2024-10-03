@@ -49,12 +49,12 @@ def main(arguments: dict):
     rd_path = "tmp" + str(uuid.uuid4())
     os.mkdir(rd_path)
     l = len(arguments["--number"].split(","))
-    if l == 1:
-        output = arguments["--output"]
-        arguments["--output"] = os.path.join(rd_path, "scheme.txt")
-        arguments["--asym"] = None
-        continous_main(arguments)
 
+    output = arguments["--output"]
+    arguments["--output"] = os.path.join(rd_path, "scheme.txt")
+    arguments["--asym"] = None
+    continous_main(arguments)
+    if l == 1:
         arguments["--input"] = os.path.join(rd_path, "scheme.txt")
         arguments["--output"] = os.path.join(rd_path, "flipped.txt")
         flip_main(arguments)
@@ -73,11 +73,6 @@ def main(arguments: dict):
         arguments["--output"] = output
         order_main(arguments)
     else:
-        output = arguments["--output"]
-        arguments["--output"] = os.path.join(rd_path, "scheme.txt")
-        arguments["--asym"] = None
-        continous_main(arguments)
-
         arguments["--input"] = ",".join(
             os.path.join(rd_path, f"scheme_shell{i}.txt") for i in range(l)
         )
