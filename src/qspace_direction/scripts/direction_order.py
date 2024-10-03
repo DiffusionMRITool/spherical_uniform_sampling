@@ -55,13 +55,13 @@ def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     inputBVecFile = arguments["BVEC"]
 
-    time = arg_values(arguments["--time_limit"], float)
+    time = arg_values(arguments["--time_limit"], float, is_single=True)
 
     output_flag = arg_bool(arguments["--verbose"], int)
 
-    num = arg_values(arguments["--split"], int)
+    num = arg_values(arguments["--split"], int, is_single=True)
 
-    weight = arg_values(arguments["--weight"], float)
+    weight = arg_values(arguments["--weight"], float, is_single=True)
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)

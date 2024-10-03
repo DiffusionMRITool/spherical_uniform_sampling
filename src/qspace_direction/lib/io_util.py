@@ -100,7 +100,7 @@ def combine_bvec_bval(bvec: List[np.ndarray], bval: List[float]):
     return np.concatenate(bvec), bvalList
 
 
-def arg_values(value, typefunc):
+def arg_values(value, typefunc, is_single: False):
     """split comma seperated value and convert them using typefunc
 
     Args:
@@ -114,7 +114,11 @@ def arg_values(value, typefunc):
     if value[0] == "(" and value[-1] == ")":
         value = value[1:-1]
     values = value.split(",")
+    if is_single:
+        return typefunc(values[0])
     return list(map(typefunc, values))
+
+
 
 
 def arg_bool(value, typefunc):

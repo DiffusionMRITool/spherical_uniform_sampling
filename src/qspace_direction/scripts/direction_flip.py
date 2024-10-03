@@ -43,7 +43,7 @@ def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     inputBvec = arg_values(arguments["--input"], lambda f: read_bvec(f, fsl_flag))
 
-    time = arg_values(arguments["--time_limit"], float)
+    time = arg_values(arguments["--time_limit"], float, is_single=True)
 
     output_flag = arg_bool(arguments["--verbose"], int)
 

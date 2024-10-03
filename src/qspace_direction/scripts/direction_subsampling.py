@@ -49,7 +49,7 @@ from qspace_direction.sampling.subsample import (
 def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     numbers = arg_values(arguments["--number"], int)
-    time = arg_values(arguments["--time_limit"], float)
+    time = arg_values(arguments["--time_limit"], float, is_single=True)
     output_flag = arg_bool(arguments["--verbose"], int)
 
     outputFile = arguments["--output"]
