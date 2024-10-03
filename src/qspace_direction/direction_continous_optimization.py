@@ -29,16 +29,23 @@ import os
 import numpy as np
 from docopt import docopt
 
-from qspace_direction.lib.io_util import arg_bool,arg_values,do_func, read_bvec, write_bvec
-
-from .sampling import cnlo_optimize
+from qspace_direction.lib.io_util import (
+    arg_bool,
+    arg_values,
+    do_func,
+    read_bvec,
+    write_bvec,
+)
+from qspace_direction.sampling.cnlo import cnlo_optimize
 
 
 def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     initVecs = None
     if arguments["--initialization"]:
-        initVecs = np.concatenate(arg_values(arguments["--initialization"], lambda f: read_bvec(f, fsl_flag)))
+        initVecs = np.concatenate(
+            arg_values(arguments["--initialization"], lambda f: read_bvec(f, fsl_flag))
+        )
 
     numbers = arg_values(arguments["--number"], int)
 

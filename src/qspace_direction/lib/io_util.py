@@ -111,9 +111,9 @@ def arg_values(value, typefunc):
         result
     """
     value = value.strip()
-    if value[0]=='(' and value[-1]==')':
+    if value[0] == "(" and value[-1] == ")":
         value = value[1:-1]
-    values = value.split(',')
+    values = value.split(",")
     return list(map(typefunc, values))
 
 

@@ -23,8 +23,19 @@ import os
 
 from docopt import docopt
 
-from .lib import do_func, read_bvec, read_bvec_bval, write_bval, write_bvec,arg_bool, arg_values
-from .sampling import incremental_sorting_multi_shell, incremental_sorting_single_shell
+from qspace_direction.lib.io_util import (
+    arg_bool,
+    arg_values,
+    do_func,
+    read_bvec,
+    read_bvec_bval,
+    write_bval,
+    write_bvec,
+)
+from qspace_direction.sampling.packing_density import (
+    incremental_sorting_multi_shell,
+    incremental_sorting_single_shell,
+)
 
 
 def gen_split(num_per_split: int, n: int):

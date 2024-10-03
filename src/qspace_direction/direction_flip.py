@@ -22,9 +22,14 @@ import os
 
 from docopt import docopt
 
-from qspace_direction.lib.io_util import arg_bool, arg_values,do_func, read_bvec, write_bvec
-
-from .sampling import (
+from qspace_direction.lib.io_util import (
+    arg_bool,
+    arg_values,
+    do_func,
+    read_bvec,
+    write_bvec,
+)
+from qspace_direction.sampling.flip import (
     milp_multi_shell_SC,
     milpflip_EEM,
     milpflip_multi_shell_EEM,
