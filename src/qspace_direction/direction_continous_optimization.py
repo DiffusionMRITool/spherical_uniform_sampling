@@ -16,8 +16,10 @@ Options:
     --fslgrad                       If set, program will read and write in fslgrad format
 
 Example:
-    python -m qspace_direction.direction_continous_optimization --output scheme.txt -n 30
-    python -m qspace_direction.direction_continous_optimization --output scheme.txt -n 90,90,90    
+    # Generate a 30 points scheme
+    python -m qspace_direction.direction_continous_optimization --output bvec.txt -n 30
+    # Generate a 90x3 points scheme
+    python -m qspace_direction.direction_continous_optimization --output bvec.txt -n 90,90,90    
 
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199

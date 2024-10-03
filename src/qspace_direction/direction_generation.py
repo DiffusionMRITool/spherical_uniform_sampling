@@ -20,8 +20,11 @@ Options:
     --fslgrad                         If set, program will read and write in fslgrad format
 
 Example:
+    # Generate a 30 points scheme without b-value
     python -m qspace_direction.direction_generation --output scheme.txt -n 30
+    # Generate a 30 points scheme with a single b-value 1000
     python -m qspace_direction.direction_generation --output scheme.txt -n 30 --bval 1000
+    # Generate a 90x3 points scheme with each shell having b-value 1000, 2000 and 3000
     python -m qspace_direction.direction_generation --output scheme.txt -n 90,90,90 --bval 1000,2000,3000   
 
 Reference:

@@ -16,7 +16,9 @@ Options:
     --fslgrad                   If set, program will read and write in fslgrad format
 
 Examples:
-    python -m qspace_direction.direction_order scheme.txt --output ordered.txt
+    # Order a single shell sampling scheme with bvec.txt
+    python -m qspace_direction.direction_order bvec.txt --output ordered.txt
+    # Order a sampling scheme with bvec and bval. This works for both single and multiple shell case.
     python -m qspace_direction.direction_order bvec.txt bval.txt --output ordered.txt
 """
 import os

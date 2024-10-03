@@ -15,8 +15,10 @@ Options:
     --fslgrad                         If set, program will read and write in fslgrad format
 
 Examples: 
-    python -m qspace_direction.direction_flip --input scheme.txt --output flipped.txt
-    python -m qspace_direction.direction_flip --input scheme_shell0.txt,scheme_shell1.txt,scheme_shell2.txt --output flipped.txt 
+    # Flip a single shell scheme
+    python -m qspace_direction.direction_flip --input bvec.txt --output flipped.txt
+    # Flip a multiple shell scheme
+    python -m qspace_direction.direction_flip --input bvec_shell0.txt,bvec_shell1.txt,bvec_shell2.txt --output flipped.txt 
 """
 import os
 
