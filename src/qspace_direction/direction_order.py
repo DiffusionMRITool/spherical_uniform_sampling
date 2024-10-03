@@ -61,12 +61,12 @@ def main(arguments):
             bvec = do_func(
                 output_flag,
                 incremental_sorting_single_shell,
-                bvecs,
+                bvecs[0],
                 gen_split(num, len(bvecs)),
                 time,
                 output_flag,
             )
-            bval = [bvalues[0] for _ in len(bvecs)]
+            bval = [bvalues[0] for _ in range(len(bvecs))]
         else:
             bvec, bval = do_func(
                 output_flag,
