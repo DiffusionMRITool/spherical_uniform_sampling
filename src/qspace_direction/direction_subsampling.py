@@ -36,9 +36,8 @@ from .sampling import (
     single_subset_from_single_set,
 )
 
-if __name__ == "__main__":
-    arguments = docopt(__doc__)
 
+def main(arguments):
     fsl_flag = True if arguments["--fslgrad"] else False
     inputFiles = arguments["--input"].split(",")
     numbers = list(map(int, arguments["--number"].split(",")))
@@ -100,3 +99,9 @@ if __name__ == "__main__":
         for i, points in enumerate(output):
             realPath = f"{root}_shell{i}{ext}"
             write_bvec(realPath, points, fsl_flag)
+
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__)
+
+    main(arguments)

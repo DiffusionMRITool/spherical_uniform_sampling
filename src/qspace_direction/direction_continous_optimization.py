@@ -32,9 +32,8 @@ from docopt import docopt
 from .lib import do_func, read_bvec, write_bvec
 from .sampling import cnlo_optimize
 
-if __name__ == "__main__":
-    arguments = docopt(__doc__)
 
+def main(arguments):
     fsl_flag = True if arguments["--fslgrad"] else False
     initVecs = None
     if arguments["--initialization"]:
@@ -70,3 +69,9 @@ if __name__ == "__main__":
         for i in range(len(numbers)):
             realPath = f"{root}_shell{i}{ext}"
             write_bvec(realPath, vects[splitPoint[i] : splitPoint[i + 1]], fsl_flag)
+
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__)
+
+    main(arguments)

@@ -38,9 +38,7 @@ def gen_split(num_per_split: int, n: int):
     return l
 
 
-if __name__ == "__main__":
-    arguments = docopt(__doc__)
-
+def main(arguments):
     fsl_flag = True if arguments["--fslgrad"] else False
     inputBVecFile = arguments["BVEC"]
 
@@ -93,3 +91,9 @@ if __name__ == "__main__":
             output_flag,
         )
         write_bvec(f"{root}{ext}", output, fsl_flag)
+
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__)
+
+    main(arguments)

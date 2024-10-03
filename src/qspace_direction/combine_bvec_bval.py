@@ -20,9 +20,8 @@ from docopt import docopt
 
 from .lib import combine_bvec_bval, read_bvec, write_bval, write_bvec
 
-if __name__ == "__main__":
-    arguments = docopt(__doc__)
 
+def main(arguments):
     fsl_flag = True if arguments["--fslgrad"] else False
     inputBVecFiles = arguments["BVEC"]
     bvecs = [read_bvec(f, fsl_flag) for f in inputBVecFiles.split(",")]
@@ -38,3 +37,9 @@ if __name__ == "__main__":
     bvecList, bvalList = combine_bvec_bval(bvecs, bvals)
     write_bvec(f"{root}_bvec{ext}", bvecList, fsl_flag)
     write_bval(f"{root}_bval{ext}", bvalList, fsl_flag)
+
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__)
+
+    main(arguments)
