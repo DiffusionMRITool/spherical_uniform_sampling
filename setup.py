@@ -23,6 +23,7 @@ setup(
         "src/qspace_direction/scripts/direction_continous_optimization.py",
         "src/qspace_direction/scripts/direction_geem.py",
         "src/qspace_direction/scripts/direction_order.py",
+        "src/qspace_direction/scripts/direction_statistics.py",
     ],
     install_requires=[
         "numpy >= 1.19.5",

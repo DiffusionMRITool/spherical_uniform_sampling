@@ -120,8 +120,6 @@ def arg_values(value, typefunc, is_single=False):
     return list(map(typefunc, values))
 
 
-
-
 def arg_bool(value, typefunc):
     """change value into typefunc bool
 

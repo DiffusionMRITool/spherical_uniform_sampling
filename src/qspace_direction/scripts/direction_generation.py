@@ -38,14 +38,13 @@ import shutil
 import uuid
 
 import numpy as np
-from docopt import docopt
-
-from qspace_direction.lib.io_util import write_bval
-
 from combine_bvec_bval import main as combine_main
 from direction_continous_optimization import main as continous_main
 from direction_flip import main as flip_main
 from direction_order import main as order_main
+from docopt import docopt
+
+from qspace_direction.lib.io_util import write_bval
 
 
 def main(arguments: dict):

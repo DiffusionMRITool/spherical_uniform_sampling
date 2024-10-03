@@ -1,5 +1,4 @@
 import numpy as np
-from itertools import combinations
 
 
 def covering_radius_upper_bound(num: int):
@@ -32,7 +31,17 @@ def covering_radius(vects: np.ndarray, antipodal=True):
     return np.arccos((np.clip(np.max(np.triu(innerProductAll, 1)), -1, 1)))
 
 
-def electrostatic_energy(vects: np.ndarray, order=2, antipodal=True,):
+def f_multi_shell(vects, f, w, *args, **kargs):
+    return w / len(vects) * sum(f(v, *args, **kargs) for v in vects) + (1 - w) * f(
+        np.concatenate(vects), *args, **kargs
+    )
+
+
+def electrostatic_energy(
+    vects: np.ndarray,
+    order=2,
+    antipodal=True,
+):
     """Electrostatic energy of a given point set
 
     Parameters
@@ -52,12 +61,11 @@ def electrostatic_energy(vects: np.ndarray, order=2, antipodal=True,):
     epsilon = 1e-9
     N = len(vects)
     energy = 0.0
-    for i in range(N):
-        indices = (np.arange(N) > i)
-        diffs = ((vects[indices] - vects[i]) ** 2).sum(1) ** order
+    for i in range(N - 1):
+        diffs = ((vects[i + 1 :] - vects[i]) ** order).sum(1)
         energy += (1.0 / (diffs + epsilon)).sum()
         if antipodal:
-            sums = ((vects[indices] + vects[i]) ** 2).sum(1) ** order
+            sums = ((vects[i + 1 :] + vects[i]) ** order).sum(1)
             energy += (1.0 / (sums + epsilon)).sum()
 
     return energy
