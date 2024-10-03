@@ -1,4 +1,5 @@
 import numpy as np
+from itertools import combinations
 
 
 def covering_radius_upper_bound(num: int):
@@ -29,6 +30,53 @@ def covering_radius(vects: np.ndarray, antipodal=True):
     """
     innerProductAll = np.abs(vects @ vects.T) if antipodal else vects @ vects.T
     return np.arccos((np.clip(np.max(np.triu(innerProductAll, 1)), -1, 1)))
+
+
+def electrostatic_energy(vects: np.ndarray, order=2, antipodal=True,):
+    """Electrostatic energy of a given point set
+
+    Parameters
+    ----------
+    vects : np.ndarray
+        Given point set.
+    order : int, optional
+        order for calculating electrostatic energy, by default 2
+    antipodal : bool, optional
+        whether ot consider antipodal energy, by default True
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    epsilon = 1e-9
+    N = len(vects)
+    energy = 0.0
+    for i in range(N):
+        indices = (np.arange(N) > i)
+        diffs = ((vects[indices] - vects[i]) ** 2).sum(1) ** order
+        energy += (1.0 / (diffs + epsilon)).sum()
+        if antipodal:
+            sums = ((vects[indices] + vects[i]) ** 2).sum(1) ** order
+            energy += (1.0 / (sums + epsilon)).sum()
+
+    return energy
+
+
+def norm_of_mean(vects: np.ndarray):
+    """Calucalte norm of mean vector of a given point set
+
+    Parameters
+    ----------
+    vects : np.ndarray
+
+    Returns
+    -------
+    float
+        norm of mean vector
+    """
+    mean = vects.mean(axis=0)
+    return np.linalg.norm(mean)
 
 
 def packing_density_loss(vects: np.ndarray, start: np.ndarray):
