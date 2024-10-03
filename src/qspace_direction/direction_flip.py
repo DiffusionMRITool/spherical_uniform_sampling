@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 """
+Description:
+    Flip a given sampling scheme.
+
 Usage:
     direction_flip.py [-v] --input=INPUT --output=OUTPUT [-t TIME] [-c CRITERIA] [--fslgrad]
 
@@ -9,7 +12,7 @@ Options:
     -v, --verbose                     Output gurobi message
     -c CRITERIA, --criteria CRITERIA  Criteria type (DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
     -t TIME, --time_limit TIME        Maximum time to run milp algorithm    [default: 600]
-    --fslgrad,                        If set, program will read and write in fslgrad format
+    --fslgrad                         If set, program will read and write in fslgrad format
 
 Examples: 
     python -m qspace_direction.direction_flip --input scheme.txt --output flipped.txt

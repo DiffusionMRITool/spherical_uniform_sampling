@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 """
+Description:
+    Generate a set of uniform sampling schemes given the number on each shell using GEEM algorithm.
+
 Usage:
     generation_geem.py [-v] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] [--fslgrad]
 
@@ -10,7 +13,7 @@ Options:
     -i INIT, --initialization INIT  Optimal initialization bvec files
     -a, --asym                      If set, the orientation is not antipodal symmetric 
     --max_iter ITER                 Maximum iteration rounds for optimization    [default: 1000]
-    --fslgrad,                      If set, program will read and write in fslgrad format
+    --fslgrad                       If set, program will read and write in fslgrad format
 
 Example:
     python -m qspace_direction.generation_geem --output scheme.txt -n 30

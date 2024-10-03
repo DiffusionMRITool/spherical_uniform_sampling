@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 """
+Description:
+    Subsample a single/multiple set of points from a given single/multiple set of points.
+
 Usage:
     direction_subsampling.py [-v] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-t TIME] [--fslgrad]
 
@@ -11,10 +14,10 @@ Options:
     -v, --verbose               Output gurobi message
     -a, --antipodal             Treat antipolar points as same
     -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
-    --fslgrad,                  If set, program will read and write in fslgrad format
+    --fslgrad                   If set, program will read and write in fslgrad format
 
 Examples:
-    python -m qspace_direction.direction_subsampling -i scheme.txt -n 30 -o subsample.txt
+    python -m qspace_direction.direction_subsampling -i scheme.txt -n 30 -o subsample.txt 
     python -m qspace_direction.direction_subsampling -i scheme.txt -n 10,10,10 -o subsample.txt
     python -m qspace_direction.direction_subsampling -i scheme_shell0.txt,scheme_shell1.txt,scheme_shell2.txt -n 30,30,30 -o subsample.txt
 

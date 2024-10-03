@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 """
+Description:
+    Order a given sampling scheme.
+
 Usage:
     direction_order.py BVEC BVAL [-v] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT] [--fslgrad]
     direction_order.py BVEC [-v] --output=OUTPUT [-t TIME] [-n NUM] [--fslgrad]
@@ -10,7 +13,7 @@ Options:
     -n NUM, --number NUM        Number of points per split. [default: 3]
     -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -t TIME, --time_limit TIME  maximum time to run milp algorithm    [default: 600]
-    --fslgrad,                  If set, program will read and write in fslgrad format
+    --fslgrad                   If set, program will read and write in fslgrad format
 
 Examples:
     python -m qspace_direction.direction_order scheme.txt --output ordered.txt

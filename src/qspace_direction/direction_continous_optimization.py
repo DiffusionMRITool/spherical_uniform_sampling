@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 """
+Description:
+    Generate a set of uniform sampling schemes given the number on each shell using CNLO algorithm.
+     
 Usage:
     direction_continous_optimization.py [-v] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] [--fslgrad]
 
@@ -10,7 +13,7 @@ Options:
     -i INIT, --initialization INIT  If set, use this file as initialization for CNLO algorithm, else use GEEM as initialization by default
     -a, --asym                      If set, the orientation is not antipodal symmetric 
     --max_iter ITER                 Maximum iteration rounds for optimization    [default: 1000]
-    --fslgrad,                      If set, program will read and write in fslgrad format
+    --fslgrad                       If set, program will read and write in fslgrad format
 
 Example:
     python -m qspace_direction.direction_continous_optimization --output scheme.txt -n 30
