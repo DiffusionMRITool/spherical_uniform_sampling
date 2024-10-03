@@ -4,8 +4,8 @@ Description:
     Optimize the order of a given sampling scheme.
 
 Usage:
-    direction_order.py BVEC BVAL [-v] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT] [--fslgrad]
-    direction_order.py BVEC [-v] --output=OUTPUT [-t TIME] [-n NUM] [--fslgrad]
+    direction_order.py BVEC BVAL [-v] --output=OUTPUT [-t TIME] [-s SPLIT] [-w WEIGHT] [--fslgrad]
+    direction_order.py BVEC [-v] --output=OUTPUT [-t TIME] [-s SPLIT] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT  Output file 
