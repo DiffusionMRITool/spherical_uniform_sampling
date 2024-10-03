@@ -71,7 +71,7 @@ def milpflip_EEM(
     order=1,
     time_limit=600,
     output_flag=1,
-):  
+):
     """Maximize seperation of a given single shell scheme by changing polarity of certain points on the sphere. This function optimizes electrastatic energy as target function.
 
     Args:

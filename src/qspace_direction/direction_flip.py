@@ -21,14 +21,14 @@ Examples:
 import os
 
 from docopt import docopt
-from .sampling import (
-    milpflip_SC,
-    milpflip_EEM,
-    milp_multi_shell_SC,
-    milpflip_multi_shell_EEM,
-)
-from .lib import do_func, read_bvec, write_bvec
 
+from .lib import do_func, read_bvec, write_bvec
+from .sampling import (
+    milp_multi_shell_SC,
+    milpflip_EEM,
+    milpflip_multi_shell_EEM,
+    milpflip_SC,
+)
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)

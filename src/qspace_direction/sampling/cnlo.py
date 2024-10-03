@@ -194,7 +194,7 @@ def inequality_constraints_9d(vects, *args):
     Returns
     -------
     Array
-        $\delta_0$ minus differce between target and initialization 
+        $\delta_0$ minus differce between target and initialization
 
     Reference
     ---------
@@ -439,7 +439,7 @@ def cnlo_optimize(
     Returns
     -------
     Array
-        Set of points generated for each shell 
+        Set of points generated for each shell
 
     Reference
     ---------

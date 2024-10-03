@@ -86,7 +86,6 @@ def greedy_sorting(points: List[np.ndarray], start: List[np.ndarray]):
     Returns:
         Array: Sorted points
     """
-    
     res, mx = None, -1
     for i in range(len(points[0])):
         tmp = greedy_sorting_init(points, i, start)
@@ -289,7 +288,7 @@ def incremental_sorting_single_shell(
     points_per_split: np.ndarray,
     time_limit=600,
     output_flag: int = 1,
-):  
+):
     """Incremental algorithm for sorting points. Given a way to split the points into segments, this function then sort them segment by segment.
 
     Args:
@@ -384,7 +383,7 @@ def incremental_sorting_multi_shell_incre(
     Returns
     -------
     Array: Array shaped (num, 3), sorted num points
-    """    
+    """
     N = len(incre_points)
     K = len(fixed_points)
     M = np.pi / 2

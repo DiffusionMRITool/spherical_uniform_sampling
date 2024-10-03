@@ -1,7 +1,8 @@
-from collections import defaultdict
 import os
 import sys
+from collections import defaultdict
 from typing import List
+
 import numpy as np
 
 

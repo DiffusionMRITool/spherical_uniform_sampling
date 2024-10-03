@@ -1,30 +1,41 @@
 #!/usr/bin/env python
 """
+Description:
+    Perform a pipeline in dMRI sampling, which contains generating continous sampling scheme using CNLO, applying polarity optimization and applying order otimization.
+     
 Usage:
-    direction_generation.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] [--fslgrad]
+    direction_generation.py [-v] --number=NUMBER --output=OUTPUT [--bval BVAL] [--initialization INIT] [-w WEIGHT] [-c CRITERIA] [-s SPLIT] [--max_iter ITER] [-t TIME] [--fslgrad]
 
 Options:
-    -o OUTPUT, --output OUTPUT      output file 
-    -n NUMBER, --number NUMBER      number chosen from each shell
-    -v, --verbose                   output message
-    -q, --quiet                     do not output message
-    -i INIT, --initialization INIT  if set, use this file as initialization for CNLO algorithm, else use GEEM as initialization by default
-    -a, --asym                      If set, the orientation is not antipodal symmetric 
-    --max_iter ITER  Maximum iteration rounds for optimization    [default: 1000]
-    --fslgrad,                      if set, program will read and write in fslgrad format
+    -o OUTPUT, --output OUTPUT        Output file 
+    -n NUMBER, --number NUMBER        Number chosen from each shell
+    -v, --verbose                     Output message
+    --bval BVAL                       Set bval for each shell
+    -i INIT, --initialization INIT    If set, use this file as initialization for CNLO algorithm, else use GEEM as initialization by default
+    -w WEIGHT, --weight WEIGHT        Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
+    -c CRITERIA, --criteria CRITERIA  Criteria type for polarity optimization (DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
+    -s SPLIT, --split SPLIT           Number of points per split for order optimization. [default: 3]
+    --max_iter ITER                   Maximum iteration rounds for continous optimization    [default: 1000]
+    -t TIME, --time_limit TIME        Maximum time to run milp algorithm    [default: 600]
+    --fslgrad                         If set, program will read and write in fslgrad format
+
+Example:
+    python -m qspace_direction.direction_generation --output scheme.txt -n 30
+    python -m qspace_direction.direction_generation --output scheme.txt -n 90,90,90 --bval 1000,2000,3000   
 
 Reference:
     1. Jian Cheng, Dinggang Shen, Pew-Thian Yap and Peter J. Basser, "Single- and Multiple-Shell Uniform Sampling Schemes for Diffusion MRI Using Spherical Codes," in IEEE Transactions on Medical Imaging, vol. 37, no. 1, pp. 185-199
-    2. Caruyer, Emmanuel, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.
-    3. Caruyer, Emmanuel, and Rachid Deriche. "Diffusion MRI signal reconstruction with continuity constraint and optimal regularization." Medical Image Analysis 16, no. 6 (2012): 1113-1120.
+    2. Emmanuel Caruyer, Christophe Lenglet, Guillermo Sapiro, and Rachid Deriche. "Design of multishell sampling schemes with uniform coverage in diffusion MRI." Magnetic Resonance in Medicine 69, no. 6 (2013): 1534-1540.
+    3. Emmanuel Caruyer, Jian Cheng, Christophe Lenglet, Guillermo Sapiro, Tianzi Jiang, and Rachid Deriche,"Optimal Design of Multiple Q-shells experiments for Diffusion MRI",MICCAI Workshop on Computational Diffusion MRI (CDMRI'11), pp. 45–53, 2011.
 """
+
 import os
 
 import numpy as np
 from docopt import docopt
-from .sampling import cnlo_optimize
-from .lib import do_func, read_bvec, write_bvec
 
+from .lib import do_func, read_bvec, write_bvec
+from .sampling import cnlo_optimize
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)
@@ -45,22 +56,3 @@ if __name__ == "__main__":
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)
-
-    vects = do_func(
-        output_flag,
-        cnlo_optimize,
-        numbers,
-        initVecs,
-        antipodal=antipodal,
-        max_iter=num_iter,
-    )
-    splitPoint = np.cumsum(numbers).tolist()
-    splitPoint.insert(0, 0)
-
-    if len(numbers) == 1:
-        realPath = f"{root}{ext}"
-        write_bvec(realPath, vects, fsl_flag)
-    else:
-        for i in range(len(numbers)):
-            realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, vects[splitPoint[i] : splitPoint[i + 1]], fsl_flag)

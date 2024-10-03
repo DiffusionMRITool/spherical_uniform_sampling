@@ -12,7 +12,7 @@ Options:
     -v, --verbose               Output gurobi message
     -n NUM, --number NUM        Number of points per split. [default: 3]
     -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
-    -t TIME, --time_limit TIME  maximum time to run milp algorithm    [default: 600]
+    -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
     --fslgrad                   If set, program will read and write in fslgrad format
 
 Examples:
@@ -20,9 +20,11 @@ Examples:
     python -m qspace_direction.direction_order bvec.txt bval.txt --output ordered.txt
 """
 import os
+
 from docopt import docopt
-from .sampling import incremental_sorting_single_shell, incremental_sorting_multi_shell
-from .lib import read_bvec, read_bvec_bval, write_bvec, write_bval, do_func
+
+from .lib import do_func, read_bvec, read_bvec_bval, write_bval, write_bvec
+from .sampling import incremental_sorting_multi_shell, incremental_sorting_single_shell
 
 
 def gen_split(num_per_split: int, n: int):
@@ -65,7 +67,7 @@ if __name__ == "__main__":
                 gen_split(num, len(bvecs)),
                 time,
                 output_flag,
-            ) 
+            )
             bval = [bvalues[0] for _ in len(bvecs)]
         else:
             bvec, bval = do_func(

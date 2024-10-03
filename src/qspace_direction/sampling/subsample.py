@@ -41,7 +41,7 @@ def multiple_subset_from_single_set(
         output_flag (int, optional): GUROBI output flag. Defaults to 1.
 
     Returns:
-        List: Set of points chosen for each shell 
+        List: Set of points chosen for each shell
     """
     N = len(points)
     S = len(points_per_shell)
@@ -183,7 +183,7 @@ def multiple_subset_from_multiple_set(
         output_flag (int, optional): GUROBI output flag. Defaults to 1.
 
     Returns:
-        List: Set of points chosen for each shell 
+        List: Set of points chosen for each shell
     """
     N_s = [len(l) for l in points]
     S = len(points_per_shell)
