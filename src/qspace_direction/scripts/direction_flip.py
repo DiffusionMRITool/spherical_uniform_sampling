@@ -4,12 +4,13 @@ Description:
     Flip a given sampling scheme.
 
 Usage:
-    direction_flip.py [-v] --input=INPUT --output=OUTPUT [-t TIME] [-c CRITERIA] [--fslgrad]
+    direction_flip.py [-v] --input=INPUT --output=OUTPUT [-w WEIGHT] [-t TIME] [-c CRITERIA] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT        Output file
     -i INPUT, --input INPUT           Input bvec files  
     -v, --verbose                     Output gurobi message
+    -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -c CRITERIA, --criteria CRITERIA  Criteria type (DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
     -t TIME, --time_limit TIME        Maximum time to run milp algorithm    [default: 600]
     --fslgrad                         If set, program will read and write in fslgrad format
@@ -51,6 +52,7 @@ def main(arguments):
     root, ext = os.path.splitext(outputFile)
 
     criteria = arguments["--criteria"]
+    weight = arg_values(arguments["--weight"], float, is_single=True)
 
     if len(inputBvec) == 1:
         method = milpflip_EEM if criteria == "ELECTROSTATIC" else milpflip_SC
@@ -61,7 +63,7 @@ def main(arguments):
             if criteria == "ELECTROSTATIC"
             else milp_multi_shell_SC
         )
-        output = do_func(output_flag, method, inputBvec, time_limit=time)
+        output = do_func(output_flag, method, inputBvec, w=weight, time_limit=time)
 
     if len(inputBvec) == 1:
         realPath = f"{root}{ext}"

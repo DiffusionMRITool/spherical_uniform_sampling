@@ -4,13 +4,14 @@ Description:
     Subsample a single/multiple set of points from a given single/multiple set of points.
 
 Usage:
-    direction_subsampling.py [-v] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-t TIME] [--fslgrad]
+    direction_subsampling.py [-v] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-w WEIGHT] [-t TIME] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT  Output file 
     -i INPUT, --input INPUT     Input bvec files
     -n NUMBER, --number NUMBER  Number chosen from each shell(in the same order of input files)
     --lower_bound LB            Lower bound for each shell and all shell conbined. This helps milp to optimize better
+    -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -v, --verbose               Output gurobi message
     -a, --antipodal             Treat antipolar points as same
     -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
@@ -64,6 +65,7 @@ def main(arguments):
         assert (
             len(lb) == len(numbers) + 1
         ), "number of lower bounds and number of shells mismatch "
+    weight = arg_values(arguments["--weight"], float, is_single=True)
     inputBvec = arg_values(arguments["--input"], lambda f: read_bvec(f, fsl_flag))
 
     if len(inputBvec) == 1:
@@ -85,6 +87,7 @@ def main(arguments):
                 multiple_subset_from_single_set,
                 inputBvec[0],
                 np.array(numbers),
+                w=weight,
                 lb=lb,
                 time_limit=time,
                 antipodal=antipodal,
@@ -96,6 +99,7 @@ def main(arguments):
             multiple_subset_from_multiple_set,
             inputBvec,
             np.array(numbers),
+            w=weight,
             lb=lb,
             time_limit=time,
             antipodal=antipodal,
