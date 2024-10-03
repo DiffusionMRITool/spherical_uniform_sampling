@@ -50,32 +50,31 @@ with continuity constraint and optimal regularization." Medical Image Analysis
 """
 
 from __future__ import division
-
-import numpy as np
 from scipy import optimize as scopt
+import numpy as np
 
 
 def equality_constraints(vects, *args):
     """
-    Spherical equality constraint. Returns 0 if vects lies on the unit
+    Spherical equality constraint. Returns 0 if vects lies on the unit 
     sphere.
-
+    
     Parameters
     ----------
     vects : array-like shape (N * 3)
-
+    
     Returns
     -------
     array shape (N,) : Difference between squared vector norms and 1.
     """
     N = vects.shape[0] // 3
     vects = vects.reshape((N, 3))
-    return (vects**2).sum(1) - 1.0
+    return (vects ** 2).sum(1) - 1.0
 
 
 def grad_equality_constraints(vects, *args):
     """
-    Return normals to the surface constraint (wich corresponds to
+    Return normals to the surface constraint (wich corresponds to 
     the gradient of the implicit function).
 
     Parameters
@@ -89,13 +88,13 @@ def grad_equality_constraints(vects, *args):
     """
     N = vects.shape[0] // 3
     vects = vects.reshape((N, 3))
-    vects = (vects.T / np.sqrt((vects**2).sum(1))).T
+    vects = (vects.T / np.sqrt((vects ** 2).sum(1))).T
     grad = np.zeros((N, N * 3))
     for i in range(3):
-        grad[:, i * N : (i + 1) * N] = np.diag(vects[:, i])
+        grad[:, i * N:(i+1) * N] = np.diag(vects[:, i])
     return grad
 
-
+	
 def f(vects, weight_matrix, antipodal=True, alpha=1.0):
     """
     Electrostatic-repulsion objective function. The alpha paramter controls
@@ -118,12 +117,13 @@ def f(vects, weight_matrix, antipodal=True, alpha=1.0):
     vects = vects.reshape((N, 3))
     energy = 0.0
     for i in range(N):
-        indices = np.arange(N) > i
+        indices = (np.arange(N) > i)
         diffs = ((vects[indices] - vects[i]) ** 2).sum(1) ** alpha
         energy += (weight_matrix[i, indices] * (1.0 / (diffs + epsilon))).sum()
         if antipodal:
-            sums = ((vects[indices] + vects[i]) ** 2).sum(1) ** alpha
-            energy += (weight_matrix[i, indices] * (1.0 / (sums + epsilon))).sum()
+            sums  = ((vects[indices] + vects[i]) ** 2).sum(1) ** alpha
+            energy += (weight_matrix[i, indices] * \
+                       (1.0 / (sums + epsilon))).sum()
     return energy
 
 
@@ -138,40 +138,30 @@ def grad_f(vects, weight_matrix, antipodal=True, alpha=1.0):
         The contribution weight of each pair of points.
     alpha : double
         Controls the power of the repulsion. Default is 1.0
-
+    
     Returns
     -------
-    grad : gradient of the objective function
+    grad : gradient of the objective function 
     """
     N = vects.shape[0] // 3
     vects = vects.reshape((N, 3))
     grad = np.zeros((N, 3))
     for i in range(N):
-        indices = np.arange(N) != i
+        indices = (np.arange(N) != i)
         diffs = ((vects[indices] - vects[i]) ** 2).sum(1) ** (alpha + 1)
-        grad[i] = (
-            -2
-            * alpha
-            * weight_matrix[i, indices]
-            * (vects[i] - vects[indices]).T
-            / diffs
-        ).sum(1)
+        grad[i] = (- 2 * alpha * weight_matrix[i, indices] * \
+                    (vects[i] - vects[indices]).T / diffs).sum(1)
         if antipodal:
-            sums = ((vects[indices] + vects[i]) ** 2).sum(1) ** (alpha + 1)
-            grad[i] += (
-                -2
-                * alpha
-                * weight_matrix[i, indices]
-                * (vects[i] + vects[indices]).T
-                / sums
-            ).sum(1)
+            sums  = ((vects[indices] + vects[i]) ** 2).sum(1) ** (alpha + 1)
+            grad[i] += (- 2 * alpha * weight_matrix[i, indices] * \
+                        (vects[i] + vects[indices]).T / sums).sum(1)
     grad = grad.reshape(N * 3)
     return grad
 
 
 def cost(vects, S, Ks, weights, antipodal=True):
     """
-    Objective function for multiple-shell energy.
+    Objective function for multiple-shell energy. 
 
     Parameters
     ----------
@@ -183,15 +173,14 @@ def cost(vects, S, Ks, weights, antipodal=True):
         balances.
     """
     K = np.sum(Ks)
-    cost = 0.0
+    cost = 0.
     indices = np.cumsum(Ks).tolist()
     indices.insert(0, 0)
     weight_matrix = np.zeros((K, K))
     for s1 in range(S):
         for s2 in range(S):
-            weight_matrix[
-                indices[s1] : indices[s1 + 1], indices[s2] : indices[s2 + 1]
-            ] = weights[s1, s2]
+            weight_matrix[indices[s1]:indices[s1 + 1], 
+                          indices[s2]:indices[s2 + 1]] = weights[s1, s2]
     return f(vects, weight_matrix, antipodal)
 
 
@@ -216,20 +205,13 @@ def grad_cost(vects, S, Ks, weights, antipodal=True):
     weight_matrix = np.zeros((K, K))
     for s1 in range(S):
         for s2 in range(S):
-            weight_matrix[
-                indices[s1] : indices[s1 + 1], indices[s2] : indices[s2 + 1]
-            ] = weights[s1, s2]
+            weight_matrix[indices[s1]:indices[s1 + 1], 
+                          indices[s2]:indices[s2 + 1]] = weights[s1, s2]
     return grad_f(vects, weight_matrix, antipodal)
 
 
-def optimize(
-    nb_shells,
-    nb_points_per_shell,
-    weights,
-    max_iter=100,
-    antipodal=True,
-    init_points=None,
-):
+def optimize(nb_shells, nb_points_per_shell, weights, max_iter=100, 
+    antipodal=True, init_points=None):
     """
     Creates a set of sampling directions on the desired number of shells.
 
@@ -250,24 +232,18 @@ def optimize(
 
     # Total number of points
     K = np.sum(nb_points_per_shell)
-
+    
     # Initialized with random directions
     if init_points is None:
         init_points = random_uniform_on_sphere(K)
     vects = init_points.reshape(K * 3)
-
-    vects = scopt.fmin_slsqp(
-        cost,
-        vects.reshape(K * 3),
-        f_eqcons=equality_constraints,
-        fprime=grad_cost,
-        iter=max_iter,
-        acc=1.0e-9,
-        args=(nb_shells, nb_points_per_shell, weights, antipodal),
-        iprint=0,
-    )
+    
+    vects = scopt.fmin_slsqp(cost, vects.reshape(K * 3), 
+        f_eqcons=equality_constraints, fprime=grad_cost, iter=max_iter, 
+        acc=1.0e-9, args=(nb_shells, nb_points_per_shell, weights, antipodal), 
+        iprint=0)
     vects = vects.reshape((K, 3))
-    vects = (vects.T / np.sqrt((vects**2).sum(1))).T
+    vects = (vects.T / np.sqrt((vects ** 2).sum(1))).T
     return vects
 
 
@@ -283,28 +259,27 @@ def write(vects, nb_shells, nb_points_per_shell, filename):
         A list of integers containing the number of points on each shell.
     filename : string
     """
-    datafile = open(filename, "w")
-    datafile.write("#shell-id\tx\ty\tz\n")
+    datafile = open(filename, 'w')
+    datafile.write('#shell-id\tx\ty\tz\n')
     k = 0
     for s in range(nb_shells):
         for n in range(nb_points_per_shell[s]):
-            datafile.write(
-                "%d\t%f\t%f\t%f\n" % (s, vects[k, 0], vects[k, 1], vects[k, 2])
-            )
+            datafile.write("%d\t%f\t%f\t%f\n" % \
+                (s, vects[k,0], vects[k,1], vects[k,2]))
             k += 1
     datafile.close()
 
 
 def random_uniform_on_sphere(K):
     """
-    Creates a set of K pseudo-random unit vectors, following a uniform
+    Creates a set of K pseudo-random unit vectors, following a uniform 
     distribution on the sphere.
     """
     phi = 2 * np.pi * np.random.rand(K)
 
     r = 2 * np.sqrt(np.random.rand(K))
     theta = 2 * np.arcsin(r / 2)
-
+    
     vects = np.zeros((K, 3))
     vects[:, 0] = np.sin(theta) * np.cos(phi)
     vects[:, 1] = np.sin(theta) * np.sin(phi)
@@ -315,7 +290,7 @@ def random_uniform_on_sphere(K):
 
 def compute_weights(nb_shells, nb_points_per_shell, shell_groups, alphas):
     """
-    Computes the weights array from a set of shell groups to couple, and
+    Computes the weights array from a set of shell groups to couple, and 
     coupling weights.
 
     """

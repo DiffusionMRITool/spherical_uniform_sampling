@@ -5,8 +5,7 @@ import gurobipy as gp
 import numpy as np
 from gurobipy import GRB
 
-from .loss import (covering_radius, covering_radius_upper_bound,
-                   packing_density_loss)
+from .loss import covering_radius, covering_radius_upper_bound, packing_density_loss
 
 
 def greedy_sorting_init(points: List[np.ndarray], init: int, start: List[np.ndarray]):
