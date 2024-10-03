@@ -1,6 +1,6 @@
 This code is used for optimizing dMRI sampling schemes.
 
-### Setup
+## Setup
 
 1. Clone this repository 
 2. Install dependencies
@@ -16,15 +16,21 @@ Note that you will need to acquire a license to use GUROBI for solving discrete 
 pip install .
 ```
 
-### Quick-start tutorial 
+## Quick-start tutorial 
 
 You can check CLI program with option `-h` for help message.
 
 For a example single shell sampling pipeline, we will first generate a scheme with 30 points and then apply flipping and ordering to it.
 
+This can be done by simply invoke
+```bash
+python -m qspace_direction.direction_generation --output flipped_ordered.txt -n 30
+```
+
+Alternately, it is equivalent to following step-by-step instructions
 1. Generate a sampling scheme
 ```bash
-python -m qspace_direction.direction_generation --output scheme.txt -n 30
+python -m qspace_direction.direction_continous_optimization --output scheme.txt -n 30
 ```
 
 2. Optimize the polarity of the resulting scheme
@@ -41,9 +47,16 @@ You can check `flipped_ordered.txt` for the final result.
 
 For a example multiple shell sampling pipeline, we will first generate a scheme with $90\times 3$ points and then apply flipping and ordering to it.
 
+This can be done by simply invoke
+```bash
+python -m qspace_direction.direction_generation --output scheme.txt -n 90,90,90 --bval 1000,2000,3000
+```
+
+Alternately, it is equivalent to following step-by-step instructions
+
 1. Generate a multiple shell sampling scheme
 ```bash
-python -m qspace_direction.direction_generation --output scheme.txt -n 90,90,90
+python -m qspace_direction.direction_generation --output flipped_ordered.txt -n 90,90,90
 ```
 
 2. Optimize the polarity of the resulting schemes
@@ -54,18 +67,12 @@ python -m qspace_direction.direction_flip --input scheme_shell0.txt,scheme_shell
 3. Optimize the polarity of the resulting schemes
 We need to concatenate 3 shells to make a bvec file.
 ```bash
-cat flipped_shell0.txt flipped_shell0.txt flipped_shell0.txt > bvec.txt
+python -m qspace_direction.combine_bvec_bval flipped_shell0.txt,flipped_shell1.txt,flipped_shell2.txt 1000,2000,3000 --output combine.txt
 ```
-Then a bval file is needed, here we create one with bvals 1000, 2000, 3000 for each shell.
-```bash
-perl -e '$count=90; while ($count>0) { print "1000\n"; $count--; }
-         $count=90; while ($count>0) { print "2000\n"; $count--; }
-         $count=90; while ($count>0) { print "3000\n"; $count--; }
-' > bval.txt
-```
+
 Finally we run our ordering script.
 ```bash
-python -m qspace_direction.direction_order bvec.txt bval.txt --output flipped_ordered.txt
+python -m qspace_direction.direction_order combine_bvec.txt combine_bval.txt --output flipped_ordered.txt
 ```
 
 ### License
