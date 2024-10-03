@@ -16,9 +16,9 @@ Options:
     --fslgrad                       If set, program will read and write in fslgrad format
 
 Example:
-    # Generate a 30 points scheme
+    # Generate a 30 points single shell sampling scheme
     python -m qspace_direction.direction_continous_optimization --output bvec.txt -n 30
-    # Generate a 90x3 points scheme
+    # Generate a 90x3 points multiple shell sampling scheme
     python -m qspace_direction.direction_continous_optimization --output bvec.txt -n 90,90,90    
 
 Reference:

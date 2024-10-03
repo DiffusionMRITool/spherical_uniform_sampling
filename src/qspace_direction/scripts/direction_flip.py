@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Description:
-    Flip a given sampling scheme.
+    Optimize the polarity of a given sampling scheme by flipping certain points within it.
 
 Usage:
     direction_flip.py [-v] --input=INPUT --output=OUTPUT [-w WEIGHT] [-t TIME] [-c CRITERIA] [--fslgrad]
@@ -16,9 +16,9 @@ Options:
     --fslgrad                         If set, program will read and write in fslgrad format
 
 Examples: 
-    # Flip a single shell scheme
+    # Optimize the polarity of a single shell scheme
     python -m qspace_direction.direction_flip --input bvec.txt --output flipped.txt
-    # Flip a multiple shell scheme
+    # Optimize the polarity of a multiple shell scheme
     python -m qspace_direction.direction_flip --input bvec_shell0.txt,bvec_shell1.txt,bvec_shell2.txt --output flipped.txt 
 """
 import os

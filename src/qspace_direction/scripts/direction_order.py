@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Description:
-    Order a given sampling scheme.
+    Optimize the order of a given sampling scheme.
 
 Usage:
     direction_order.py BVEC BVAL [-v] --output=OUTPUT [-t TIME] [-n NUM] [-w WEIGHT] [--fslgrad]
@@ -16,9 +16,9 @@ Options:
     --fslgrad                   If set, program will read and write in fslgrad format
 
 Examples:
-    # Order a single shell sampling scheme with bvec.txt
+    # Optimize the order of a single shell sampling scheme with bvec.txt
     python -m qspace_direction.direction_order bvec.txt --output ordered.txt
-    # Order a sampling scheme with bvec and bval. This works for both single and multiple shell case.
+    # Optimize the order of a sampling scheme with bvec and bval. This works for both single and multiple shell case.
     python -m qspace_direction.direction_order bvec.txt bval.txt --output ordered.txt
 """
 import os
