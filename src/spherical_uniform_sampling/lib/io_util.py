@@ -56,33 +56,41 @@ def read_bvec_bval(bvec_file: str, bval_file: str, fsl_flag=False):
     return ks, vs
 
 
-def write_bvec(filename: str, bvec: np.ndarray, fsl_flag=False):
+def write_bvec(filename: str, bvec: np.ndarray, fsl_flag=False, verbose_flag=1, message=""):
     """write bvec to file
 
     Args:
         filename (str): bvec filename
         bvec (np.ndarray): b-vectors
         fsl_flag (bool, optional): Whether to write in fsl format. Defaults to False.
+        verbose_flag (int, optional): Whether to output help message
+        message (str, optinal): message to write
     """
     with open(filename, "w") as f:
         if fsl_flag:
             bvec = list(zip(*bvec))
         f.writelines(map(lambda x: f"{' '.join(map(str, x))}\n", bvec))
+    if verbose_flag:
+        print(f"Save {message} to {filename}")
 
 
-def write_bval(filename: str, bval: List[int], fsl_flag=False):
+def write_bval(filename: str, bval: List[int], fsl_flag=False, verbose_flag=1, message=""):
     """write bval to file
 
     Args:
         filename (str): bval filename
         bval (List[int]): b-values
         fsl_flag (bool, optional): Whether to write in fsl format. Defaults to False.
+        verbose_flag (int, optional): Whether to output help message
+        message (str, optinal): message to write
     """
     with open(filename, "w") as f:
         if fsl_flag:
             f.write(f"{' '.join(map(str, bval))}")
         else:
             f.writelines(map(lambda x: f"{x}\n", bval))
+    if verbose_flag:
+        print(f"Save {message} to {filename}")
 
 
 def combine_bvec_bval(bvec: List[np.ndarray], bval: List[float]):
@@ -136,14 +144,17 @@ def arg_bool(value, typefunc):
         return typefunc(0)
 
 
-def do_func(flag: bool, f, *args, **kwargs):
+def do_func(flag, f, f_name, *args, **kwargs):
     """execute and return f(*args, **kwargs), and optionally redirect output to devnull
 
     Args:
-        flag (bool): whether or not to keep stdout of f
+        flag (int): verbose level
         f (function): function to execute
+        f_name (str): funtion name
     """
-    if flag:
+    if flag >= 1:
+        print(f"Running {f_name} optimization ...")
+    if flag == 2:
         ret = f(*args, **kwargs)
     else:
         try:
@@ -152,4 +163,6 @@ def do_func(flag: bool, f, *args, **kwargs):
                 ret = f(*args, **kwargs)
         finally:
             sys.stdout = sys.__stdout__
+    if flag >= 1:
+        print(f"Done")
     return ret

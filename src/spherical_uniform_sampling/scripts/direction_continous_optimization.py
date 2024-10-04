@@ -4,12 +4,13 @@ Description:
     Generate a set of uniform sampling schemes given the number on each shell using CNLO algorithm.
      
 Usage:
-    direction_continous_optimization.py [-v] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] [--fslgrad]
+    direction_continous_optimization.py [-v | -q] --number=NUMBER --output=OUTPUT [--asym] [--max_iter ITER] [--initialization INIT] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT      Output file 
     -n NUMBER, --number NUMBER      Number chosen from each shell
     -v, --verbose                   Output message
+    -q, --quiet                     Don't output any message
     -i INIT, --initialization INIT  If set, use this file as initialization for CNLO algorithm, else use GEEM as initialization by default
     -a, --asym                      If set, the orientation is not antipodal symmetric 
     --max_iter ITER                 Maximum iteration rounds for optimization    [default: 1000]
@@ -53,7 +54,11 @@ def main(arguments):
 
     num_iter = arg_values(arguments["--max_iter"], int, is_single=True)
 
-    output_flag = arg_bool(arguments["--verbose"], int)
+    output_flag = 1
+    if arguments["--verbose"]:
+        output_flag = 2
+    if arguments["--quiet"]:
+        output_flag = 0
 
     antipodal = not arg_bool(arguments["--asym"], bool)
 
@@ -63,6 +68,7 @@ def main(arguments):
     vects = do_func(
         output_flag,
         cnlo_optimize,
+        "continuous CNLO",
         numbers,
         initVecs,
         antipodal=antipodal,
@@ -73,11 +79,11 @@ def main(arguments):
 
     if len(numbers) == 1:
         realPath = f"{root}{ext}"
-        write_bvec(realPath, vects, fsl_flag)
+        write_bvec(realPath, vects, fsl_flag, output_flag, "orientations")
     else:
         for i in range(len(numbers)):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, vects[splitPoint[i] : splitPoint[i + 1]], fsl_flag)
+            write_bvec(realPath, vects[splitPoint[i] : splitPoint[i + 1]], fsl_flag, output_flag, f"orientations in shell {i}")
 
 
 if __name__ == "__main__":

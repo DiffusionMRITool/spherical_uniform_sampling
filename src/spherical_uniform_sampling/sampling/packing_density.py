@@ -281,6 +281,7 @@ def incremental_sorting_single_shell(
     Returns:
         Array: Sorted points
     """
+    print(time_limit, type(time_limit))
     if isinstance(time_limit, float):
         time_limit = [time_limit for _ in range(len(points_per_split))]
     result = []

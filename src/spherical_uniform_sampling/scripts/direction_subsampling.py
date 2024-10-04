@@ -4,7 +4,7 @@ Description:
     Subsample a single/multiple set of points from a given single/multiple set of points.
 
 Usage:
-    direction_subsampling.py [-v] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-w WEIGHT] [-t TIME] [--fslgrad]
+    direction_subsampling.py [-v | -q] [-a] --input=INPUT --number=NUMBER --output=OUTPUT [--lower_bound LB] [-w WEIGHT] [-t TIME] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT  Output file 
@@ -13,6 +13,7 @@ Options:
     --lower_bound LB            Lower bound for each shell and all shell conbined. This helps milp to optimize better
     -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -v, --verbose               Output gurobi message
+    -q, --quiet                 Don't output any message
     -a, --antipodal             Treat antipolar points as same
     -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
     --fslgrad                   If set, program will read and write in fslgrad format
@@ -51,7 +52,11 @@ def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     numbers = arg_values(arguments["--number"], int)
     time = arg_values(arguments["--time_limit"], float, is_single=True)
-    output_flag = arg_bool(arguments["--verbose"], int)
+    output_flag = 1
+    if arguments["--verbose"]:
+        output_flag = 2
+    if arguments["--quiet"]:
+        output_flag = 0
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)
@@ -74,6 +79,7 @@ def main(arguments):
                 do_func(
                     output_flag,
                     single_subset_from_single_set,
+                    "subsampling",
                     inputBvec[0],
                     numbers[0],
                     lb=lb,
@@ -85,6 +91,7 @@ def main(arguments):
             output = do_func(
                 output_flag,
                 multiple_subset_from_single_set,
+                "subsampling",
                 inputBvec[0],
                 np.array(numbers),
                 w=weight,
@@ -97,6 +104,7 @@ def main(arguments):
         output = do_func(
             output_flag,
             multiple_subset_from_multiple_set,
+            "subsampling",
             inputBvec,
             np.array(numbers),
             w=weight,
@@ -107,11 +115,11 @@ def main(arguments):
 
     if len(inputBvec) == 1 and len(numbers) == 1:
         realPath = f"{root}{ext}"
-        write_bvec(realPath, output[0], fsl_flag)
+        write_bvec(realPath, output[0], fsl_flag, output_flag, "subsample result")
     else:
         for i, points in enumerate(output):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, points, fsl_flag)
+            write_bvec(realPath, points, fsl_flag, output_flag, f"subsample result in shell {i}")
 
 
 if __name__ == "__main__":

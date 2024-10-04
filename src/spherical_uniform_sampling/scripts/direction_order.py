@@ -4,12 +4,13 @@ Description:
     Optimize the order of a given sampling scheme.
 
 Usage:
-    direction_order.py BVEC BVAL [-v] --output=OUTPUT [-t TIME] [-s SPLIT] [-w WEIGHT] [--fslgrad]
-    direction_order.py BVEC [-v] --output=OUTPUT [-t TIME] [-s SPLIT] [--fslgrad]
+    direction_order.py BVEC BVAL [-v | -q] --output=OUTPUT [-t TIME] [-s SPLIT] [-w WEIGHT] [--fslgrad]
+    direction_order.py BVEC [-v | -q] --output=OUTPUT [-t TIME] [-s SPLIT] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT  Output file 
     -v, --verbose               Output gurobi message
+    -q, --quiet                 Don't output any message
     -s SPLIT, --split SPLIT     Number of points per split for order optimization. [default: 3]
     -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
@@ -57,7 +58,11 @@ def main(arguments):
 
     time = arg_values(arguments["--time_limit"], float, is_single=True)
 
-    output_flag = arg_bool(arguments["--verbose"], int)
+    output_flag = 1
+    if arguments["--verbose"]:
+        output_flag = 2
+    if arguments["--quiet"]:
+        output_flag = 0
 
     num = arg_values(arguments["--split"], int, is_single=True)
 
@@ -74,6 +79,7 @@ def main(arguments):
             bvec = do_func(
                 output_flag,
                 incremental_sorting_single_shell,
+                "order",
                 bvecs[0],
                 gen_split(num, len(bvecs[0])),
                 time,
@@ -84,6 +90,7 @@ def main(arguments):
             bvec, bval = do_func(
                 output_flag,
                 incremental_sorting_multi_shell,
+                "order",
                 bvecs,
                 bvalues,
                 gen_split(num, sum(len(l) for l in bvecs)),
@@ -91,19 +98,20 @@ def main(arguments):
                 time_limit=time,
                 output_flag=output_flag,
             )
-        write_bvec(f"{root}_bvec{ext}", bvec, fsl_flag)
-        write_bval(f"{root}_bval{ext}", bval, fsl_flag)
+        write_bvec(f"{root}_bvec{ext}", bvec, fsl_flag, output_flag, "order optimized b-vectors")
+        write_bval(f"{root}_bval{ext}", bval, fsl_flag, output_flag, "order optimized b-values")
     else:
         bvec = read_bvec(inputBVecFile, fsl_flag)
         output = do_func(
             output_flag,
             incremental_sorting_single_shell,
+            "order",
             bvec,
             gen_split(num, len(bvec)),
             time,
             output_flag,
         )
-        write_bvec(f"{root}{ext}", output, fsl_flag)
+        write_bvec(f"{root}{ext}", output, fsl_flag, output_flag, "order optimized b-vectors")
 
 
 if __name__ == "__main__":

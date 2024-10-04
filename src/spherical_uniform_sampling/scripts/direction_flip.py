@@ -4,12 +4,13 @@ Description:
     Optimize the polarity of a given sampling scheme by flipping certain points within it.
 
 Usage:
-    direction_flip.py [-v] --input=INPUT --output=OUTPUT [-w WEIGHT] [-t TIME] [-c CRITERIA] [--fslgrad]
+    direction_flip.py [-v | -q] --input=INPUT --output=OUTPUT [-w WEIGHT] [-t TIME] [-c CRITERIA] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT        Output file
     -i INPUT, --input INPUT           Input bvec files  
     -v, --verbose                     Output gurobi message
+    -q, --quiet                       Don't output any message
     -w WEIGHT, --weight WEIGHT        Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -c CRITERIA, --criteria CRITERIA  Criteria type (DISTANCE or ELECTROSTATIC). [default: ELECTROSTATIC]
     -t TIME, --time_limit TIME        Maximum time to run milp algorithm    [default: 600]
@@ -46,7 +47,11 @@ def main(arguments):
 
     time = arg_values(arguments["--time_limit"], float, is_single=True)
 
-    output_flag = arg_bool(arguments["--verbose"], int)
+    output_flag = 1
+    if arguments["--verbose"]:
+        output_flag = 2
+    if arguments["--quiet"]:
+        output_flag = 0
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)
@@ -56,22 +61,22 @@ def main(arguments):
 
     if len(inputBvec) == 1:
         method = milpflip_EEM if criteria == "ELECTROSTATIC" else milpflip_SC
-        output = do_func(output_flag, method, inputBvec[0], time_limit=time)
+        output = do_func(output_flag, method, f"{criteria} base polarity", inputBvec[0], time_limit=time)
     else:
         method = (
             milpflip_multi_shell_EEM
             if criteria == "ELECTROSTATIC"
             else milp_multi_shell_SC
         )
-        output = do_func(output_flag, method, inputBvec, w=weight, time_limit=time)
+        output = do_func(output_flag, method, f"{criteria} base polarity", inputBvec, w=weight, time_limit=time)
 
     if len(inputBvec) == 1:
         realPath = f"{root}{ext}"
-        write_bvec(realPath, output, fsl_flag)
+        write_bvec(realPath, output, fsl_flag, output_flag, "polarity optimized orientations")
     else:
         for i, points in enumerate(output):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, points, fsl_flag)
+            write_bvec(realPath, points, fsl_flag, output_flag, f"polarity optimized orientations in shell {i}")
 
 
 if __name__ == "__main__":

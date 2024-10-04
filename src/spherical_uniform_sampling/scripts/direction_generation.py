@@ -4,12 +4,13 @@ Description:
     Perform a pipeline in dMRI sampling, which contains generating continous sampling scheme using CNLO, applying polarity optimization and applying order otimization.
      
 Usage:
-    direction_generation.py [-v] --number=NUMBER --output=OUTPUT [--bval BVAL] [--initialization INIT] [-w WEIGHT] [-c CRITERIA] [-s SPLIT] [--max_iter ITER] [-t TIME] [--fslgrad]
+    direction_generation.py [-v | -q] --number=NUMBER --output=OUTPUT [--bval BVAL] [--initialization INIT] [-w WEIGHT] [-c CRITERIA] [-s SPLIT] [--max_iter ITER] [-t TIME] [--fslgrad]
 
 Options:
     -o OUTPUT, --output OUTPUT        Output file 
     -n NUMBER, --number NUMBER        Number chosen from each shell
     -v, --verbose                     Output message
+    -q, --quiet                       Don't output any message
     --bval BVAL                       Set bval for each shell
     -i INIT, --initialization INIT    If set, use this file as initialization for CNLO algorithm, else use GEEM as initialization by default
     -w WEIGHT, --weight WEIGHT        Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
@@ -48,9 +49,16 @@ from spherical_uniform_sampling.lib.io_util import write_bval
 
 
 def main(arguments: dict):
+    output_flag = 1
+    if arguments["--verbose"]:
+        output_flag = 2
+    if arguments["--quiet"]:
+        output_flag = 0
     # create a temporary directory and work in it
     rd_path = "tmp" + str(uuid.uuid4())
     os.mkdir(rd_path)
+    if output_flag:
+        print(f"Create temporary directory {rd_path}")
     l = len(arguments["--number"].split(","))
 
     output = arguments["--output"]
@@ -94,6 +102,9 @@ def main(arguments: dict):
         arguments["BVAL"] = os.path.join(rd_path, "combine_bval.txt")
         arguments["--output"] = output
         order_main(arguments)
+    
+    if output_flag:
+        print(f"Remove temporary directory {rd_path}")
     shutil.rmtree(rd_path)
 
 
