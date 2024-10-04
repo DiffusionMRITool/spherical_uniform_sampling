@@ -42,9 +42,9 @@ def weighted_cost_multi_shell(vects, cost, w, *args, **kargs):
     Returns:
         float: weighted cost
     """
-    return w / len(vects) * sum(cost(v, *args, **kargs) for v in vects) + (1 - w) * cost(
-        np.concatenate(vects), *args, **kargs
-    )
+    return w / len(vects) * sum(cost(v, *args, **kargs) for v in vects) + (
+        1 - w
+    ) * cost(np.concatenate(vects), *args, **kargs)
 
 
 def electrostatic_energy(

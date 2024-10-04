@@ -102,7 +102,7 @@ def main(arguments: dict):
         arguments["BVAL"] = os.path.join(rd_path, "combine_bval.txt")
         arguments["--output"] = output
         order_main(arguments)
-    
+
     if output_flag:
         print(f"Remove temporary directory {rd_path}")
     shutil.rmtree(rd_path)

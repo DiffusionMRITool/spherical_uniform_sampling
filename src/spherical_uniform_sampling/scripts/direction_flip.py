@@ -61,22 +61,43 @@ def main(arguments):
 
     if len(inputBvec) == 1:
         method = milpflip_EEM if criteria == "ELECTROSTATIC" else milpflip_SC
-        output = do_func(output_flag, method, f"{criteria} base polarity", inputBvec[0], time_limit=time)
+        output = do_func(
+            output_flag,
+            method,
+            f"{criteria} base polarity",
+            inputBvec[0],
+            time_limit=time,
+        )
     else:
         method = (
             milpflip_multi_shell_EEM
             if criteria == "ELECTROSTATIC"
             else milp_multi_shell_SC
         )
-        output = do_func(output_flag, method, f"{criteria} base polarity", inputBvec, w=weight, time_limit=time)
+        output = do_func(
+            output_flag,
+            method,
+            f"{criteria} base polarity",
+            inputBvec,
+            w=weight,
+            time_limit=time,
+        )
 
     if len(inputBvec) == 1:
         realPath = f"{root}{ext}"
-        write_bvec(realPath, output, fsl_flag, output_flag, "polarity optimized orientations")
+        write_bvec(
+            realPath, output, fsl_flag, output_flag, "polarity optimized orientations"
+        )
     else:
         for i, points in enumerate(output):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, points, fsl_flag, output_flag, f"polarity optimized orientations in shell {i}")
+            write_bvec(
+                realPath,
+                points,
+                fsl_flag,
+                output_flag,
+                f"polarity optimized orientations in shell {i}",
+            )
 
 
 if __name__ == "__main__":

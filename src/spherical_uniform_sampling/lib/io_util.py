@@ -56,7 +56,9 @@ def read_bvec_bval(bvec_file: str, bval_file: str, fsl_flag=False):
     return ks, vs
 
 
-def write_bvec(filename: str, bvec: np.ndarray, fsl_flag=False, verbose_flag=1, message=""):
+def write_bvec(
+    filename: str, bvec: np.ndarray, fsl_flag=False, verbose_flag=1, message=""
+):
     """write bvec to file
 
     Args:
@@ -74,7 +76,9 @@ def write_bvec(filename: str, bvec: np.ndarray, fsl_flag=False, verbose_flag=1, 
         print(f"Save {message} to {filename}")
 
 
-def write_bval(filename: str, bval: List[int], fsl_flag=False, verbose_flag=1, message=""):
+def write_bval(
+    filename: str, bval: List[int], fsl_flag=False, verbose_flag=1, message=""
+):
     """write bval to file
 
     Args:

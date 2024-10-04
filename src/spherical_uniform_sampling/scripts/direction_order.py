@@ -98,8 +98,16 @@ def main(arguments):
                 time_limit=time,
                 output_flag=output_flag,
             )
-        write_bvec(f"{root}_bvec{ext}", bvec, fsl_flag, output_flag, "order optimized b-vectors")
-        write_bval(f"{root}_bval{ext}", bval, fsl_flag, output_flag, "order optimized b-values")
+        write_bvec(
+            f"{root}_bvec{ext}",
+            bvec,
+            fsl_flag,
+            output_flag,
+            "order optimized b-vectors",
+        )
+        write_bval(
+            f"{root}_bval{ext}", bval, fsl_flag, output_flag, "order optimized b-values"
+        )
     else:
         bvec = read_bvec(inputBVecFile, fsl_flag)
         output = do_func(
@@ -111,7 +119,9 @@ def main(arguments):
             time,
             output_flag,
         )
-        write_bvec(f"{root}{ext}", output, fsl_flag, output_flag, "order optimized b-vectors")
+        write_bvec(
+            f"{root}{ext}", output, fsl_flag, output_flag, "order optimized b-vectors"
+        )
 
 
 if __name__ == "__main__":

@@ -119,7 +119,13 @@ def main(arguments):
     else:
         for i, points in enumerate(output):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, points, fsl_flag, output_flag, f"subsample result in shell {i}")
+            write_bvec(
+                realPath,
+                points,
+                fsl_flag,
+                output_flag,
+                f"subsample result in shell {i}",
+            )
 
 
 if __name__ == "__main__":

@@ -25,7 +25,12 @@ Examples:
 import numpy as np
 from docopt import docopt
 
-from spherical_uniform_sampling.lib.io_util import arg_bool, arg_values, read_bvec, read_bvec_bval
+from spherical_uniform_sampling.lib.io_util import (
+    arg_bool,
+    arg_values,
+    read_bvec,
+    read_bvec_bval,
+)
 from spherical_uniform_sampling.sampling.loss import (
     covering_radius,
     electrostatic_energy,

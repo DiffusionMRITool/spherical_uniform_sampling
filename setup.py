@@ -9,7 +9,11 @@ setup(
     author="Si-Miao Zhang",
     author_email="zhangsimiao@buaa.edu,cn",
     url="",
-    packages=["spherical_uniform_sampling", "spherical_uniform_sampling.sampling", "spherical_uniform_sampling.lib"],
+    packages=[
+        "spherical_uniform_sampling",
+        "spherical_uniform_sampling.sampling",
+        "spherical_uniform_sampling.lib",
+    ],
     package_dir={
         "spherical_uniform_sampling": "src/spherical_uniform_sampling",
         "spherical_uniform_sampling.sampling": "src/spherical_uniform_sampling/sampling",

@@ -91,7 +91,13 @@ def main(arguments):
     else:
         for i in range(len(numbers)):
             realPath = f"{root}_shell{i}{ext}"
-            write_bvec(realPath, vects[splitPoint[i] : splitPoint[i + 1]], fsl_flag, output_flag, f"orientations in shell {i}")
+            write_bvec(
+                realPath,
+                vects[splitPoint[i] : splitPoint[i + 1]],
+                fsl_flag,
+                output_flag,
+                f"orientations in shell {i}",
+            )
 
 
 if __name__ == "__main__":

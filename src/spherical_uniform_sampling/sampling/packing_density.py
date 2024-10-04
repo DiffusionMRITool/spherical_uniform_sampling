@@ -109,7 +109,13 @@ def incremental_sorting_single_shell_init(
     x = m.addVars(N, K, lb=0, ub=1, vtype=GRB.BINARY, name="x")
     cos_theta = m.addVars(
         [i for i in np.arange(2, K + 1)],
-        lb=np.max([np.zeros((K - 1,)), np.cos(covering_radius_upper_bound(2 * np.arange(2, K + 1)))], axis=0),
+        lb=np.max(
+            [
+                np.zeros((K - 1,)),
+                np.cos(covering_radius_upper_bound(2 * np.arange(2, K + 1))),
+            ],
+            axis=0,
+        ),
         ub=1,
         vtype=GRB.CONTINUOUS,
         name="theta",
