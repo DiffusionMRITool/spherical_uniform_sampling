@@ -25,8 +25,8 @@ Examples:
 import numpy as np
 from docopt import docopt
 
-from qspace_direction.lib.io_util import arg_bool, arg_values, read_bvec, read_bvec_bval
-from qspace_direction.sampling.loss import (
+from spherical_uniform_sampling.lib.io_util import arg_bool, arg_values, read_bvec, read_bvec_bval
+from spherical_uniform_sampling.sampling.loss import (
     covering_radius,
     electrostatic_energy,
     weighted_cost_multi_shell,

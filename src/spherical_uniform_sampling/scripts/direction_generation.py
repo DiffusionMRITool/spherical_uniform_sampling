@@ -44,7 +44,7 @@ from direction_flip import main as flip_main
 from direction_order import main as order_main
 from docopt import docopt
 
-from qspace_direction.lib.io_util import write_bval
+from spherical_uniform_sampling.lib.io_util import write_bval
 
 
 def main(arguments: dict):

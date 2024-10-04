@@ -18,7 +18,7 @@ import os
 
 from docopt import docopt
 
-from qspace_direction.lib.io_util import (
+from spherical_uniform_sampling.lib.io_util import (
     arg_bool,
     arg_values,
     combine_bvec_bval,

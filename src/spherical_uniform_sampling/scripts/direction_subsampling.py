@@ -33,14 +33,14 @@ import os
 import numpy as np
 from docopt import docopt
 
-from qspace_direction.lib.io_util import (
+from spherical_uniform_sampling.lib.io_util import (
     arg_bool,
     arg_values,
     do_func,
     read_bvec,
     write_bvec,
 )
-from qspace_direction.sampling.subsample import (
+from spherical_uniform_sampling.sampling.subsample import (
     multiple_subset_from_multiple_set,
     multiple_subset_from_single_set,
     single_subset_from_single_set,

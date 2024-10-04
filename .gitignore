@@ -1,4 +1,4 @@
 dist/*
-qspace_direction.egg-info/*
+*.egg-info/*
 build/*
 **/__pycache__/**
