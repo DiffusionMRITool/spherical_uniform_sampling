@@ -45,7 +45,7 @@ def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     inputBvec = arg_values(arguments["--input"], lambda f: read_bvec(f, fsl_flag))
 
-    time = arg_values(arguments["--time_limit"], float, is_single=True)
+    time = arg_values(arguments["--time_limit"], float, 1, is_single=True)
 
     output_flag = 1
     if arguments["--verbose"]:
@@ -57,7 +57,7 @@ def main(arguments):
     root, ext = os.path.splitext(outputFile)
 
     criteria = arguments["--criteria"]
-    weight = arg_values(arguments["--weight"], float, is_single=True)
+    weight = arg_values(arguments["--weight"], float, 1, is_single=True)
 
     if len(inputBvec) == 1:
         method = milpflip_EEM if criteria == "ELECTROSTATIC" else milpflip_SC

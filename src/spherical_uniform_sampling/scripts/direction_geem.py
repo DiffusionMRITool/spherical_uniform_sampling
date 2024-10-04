@@ -52,7 +52,7 @@ def main(arguments):
 
     numbers = arg_values(arguments["--number"], int)
 
-    num_iter = arg_values(arguments["--max_iter"], int, is_single=True)
+    num_iter = arg_values(arguments["--max_iter"], int, 1, is_single=True)
 
     output_flag = 1
     if arguments["--verbose"]:

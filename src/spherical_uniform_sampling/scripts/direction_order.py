@@ -56,7 +56,7 @@ def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     inputBVecFile = arguments["BVEC"]
 
-    time = arg_values(arguments["--time_limit"], float, is_single=True)
+    time = arg_values(arguments["--time_limit"], float, 1, is_single=True)
 
     output_flag = 1
     if arguments["--verbose"]:
@@ -64,9 +64,9 @@ def main(arguments):
     if arguments["--quiet"]:
         output_flag = 0
 
-    num = arg_values(arguments["--split"], int, is_single=True)
+    num = arg_values(arguments["--split"], int, 1, is_single=True)
 
-    weight = arg_values(arguments["--weight"], float, is_single=True)
+    weight = arg_values(arguments["--weight"], float, 1, is_single=True)
 
     outputFile = arguments["--output"]
     root, ext = os.path.splitext(outputFile)

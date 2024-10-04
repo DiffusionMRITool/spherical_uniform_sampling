@@ -68,10 +68,10 @@ def display_bvec_stat_combined(bvec, order, antipodal, weight):
 def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
 
-    weight = arg_values(arguments["--weight"], float, is_single=True)
+    weight = arg_values(arguments["--weight"], float, 1, is_single=True)
     show_combine = arg_bool(arguments["--combine"], bool)
     antipodal = not arg_bool(arguments["--asym"], bool)
-    order = arg_values(arguments["--order"], float, is_single=True)
+    order = arg_values(arguments["--order"], float, 1, is_single=True)
 
     if arguments["BVAL"]:
         bvals, bvecs = read_bvec_bval(arguments["BVEC"], arguments["BVAL"], fsl_flag)

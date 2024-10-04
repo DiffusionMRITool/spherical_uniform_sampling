@@ -51,7 +51,7 @@ from spherical_uniform_sampling.sampling.subsample import (
 def main(arguments):
     fsl_flag = arg_bool(arguments["--fslgrad"], bool)
     numbers = arg_values(arguments["--number"], int)
-    time = arg_values(arguments["--time_limit"], float, is_single=True)
+    time = arg_values(arguments["--time_limit"], float, 1, is_single=True)
     output_flag = 1
     if arguments["--verbose"]:
         output_flag = 2
@@ -70,7 +70,7 @@ def main(arguments):
         assert (
             len(lb) == len(numbers) + 1
         ), "number of lower bounds and number of shells mismatch "
-    weight = arg_values(arguments["--weight"], float, is_single=True)
+    weight = arg_values(arguments["--weight"], float, 1, is_single=True)
     inputBvec = arg_values(arguments["--input"], lambda f: read_bvec(f, fsl_flag))
 
     if len(inputBvec) == 1:

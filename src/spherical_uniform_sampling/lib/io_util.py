@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 from collections import defaultdict
@@ -112,12 +113,13 @@ def combine_bvec_bval(bvec: List[np.ndarray], bval: List[float]):
     return np.concatenate(bvec), bvalList
 
 
-def arg_values(value, typefunc, is_single=False):
+def arg_values(value, typefunc, numberOfValues=-1, is_single=False):
     """split comma seperated value and convert them using typefunc
 
     Args:
         value (Any): value
         typefunc : conversion function
+        numberOfValues (int) : number of values,f numberOfValues < 0, it supports arbitrary number of inputs
         is_single (bool) : whether to choose value as a single item rather than list
 
     Returns:
@@ -127,6 +129,8 @@ def arg_values(value, typefunc, is_single=False):
     if value[0] == "(" and value[-1] == ")":
         value = value[1:-1]
     values = value.split(",")
+    if numberOfValues > 0 and len(values) != numberOfValues:
+        raise argparse.ArgumentError
     if is_single:
         return typefunc(values[0])
     return list(map(typefunc, values))
