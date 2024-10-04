@@ -1,6 +1,6 @@
 This code is used for optimizing dMRI sampling schemes.
 
-## Setup
+## Install
 
 1. Clone this repository 
 2. Install dependencies
@@ -20,9 +20,9 @@ pip install .
 
 You can check CLI program with option `-h` for help message.
 
-### Single shell example
+### Generate a single shell sampling scheme
 
-For a example single shell sampling pipeline, we will first generate a scheme with 30 points and then apply flipping and ordering to it.
+For a example of a single shell sampling pipeline, we will first generate a scheme with 30 points using continous optimization and then apply polarity optimization and order optimization to it. 
 
 This can be done by simply invoke
 ```bash
@@ -47,9 +47,9 @@ direction_order.py flipped.txt --output flipped_ordered.txt
 
 You can check `flipped_ordered.txt` for the final result. 
 
-### Multiple shell example
+### Generate a multiple shell sampling scheme
 
-For a example multiple shell sampling pipeline, we will first generate a scheme with $30\times 3$ points and then apply flipping and ordering to it.
+For an example of a multiple shell sampling pipeline, we will first generate a scheme with $30\times 3$ points using continous optimization and then apply polarity optimization and order optimization to it. 
 
 This can be done by simply invoke
 ```bash
@@ -79,5 +79,22 @@ Finally we run our ordering script.
 direction_order.py combine_bvec.txt combine_bval.txt --output flipped_ordered.txt
 ```
 
-### License
+### Subsample example
+
+If you already have a single shell sampling scheme `scheme.txt` (or you may generate one using methods above), you can subsample a single set of points from it.
+```bash
+direction_subsample.py --input scheme.txt --output subsample.txt -n 30
+```
+
+Or you can subsample multiple sets of points from it
+```bash
+direction_subsample.py --input scheme.txt --output subsample.txt -n 10,10,10
+```
+
+Given a multiple shell sampling scheme, e.g. HCP scheme, you can sample subsample multiple sets of points from each shell.
+```bash
+direction_subsample.py --input grad_b1000.txt,grad_b2000.txt,grad_b3000.txt --output subsample.txt -n 30,30,30
+```
+
+## License
 This project is licensed under the [LICENSE](LICENSE).
