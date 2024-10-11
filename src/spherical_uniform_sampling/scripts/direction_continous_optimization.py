@@ -39,7 +39,7 @@ from spherical_uniform_sampling.lib.io_util import (
     read_bvec,
     write_bvec,
 )
-from spherical_uniform_sampling.sampling.cnlo import cnlo_optimize
+from spherical_uniform_sampling.sampling.cnlo import cnlo_optimize, iter_cnlo_optimize
 
 
 def main(arguments):
@@ -67,7 +67,7 @@ def main(arguments):
 
     vects = do_func(
         output_flag,
-        cnlo_optimize,
+        iter_cnlo_optimize,
         "continuous CNLO",
         numbers,
         initVecs,

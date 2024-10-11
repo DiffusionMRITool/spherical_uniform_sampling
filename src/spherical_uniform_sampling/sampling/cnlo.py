@@ -495,3 +495,22 @@ def cnlo_optimize(
     print(vects[-len(points_per_shell) - 1 :] * 180 / np.pi)
 
     return vects[: 3 * nb_points].reshape((nb_points, 3))
+
+
+def iter_cnlo_optimize(
+    points_per_shell,
+    initialization=None,
+    antipodal=True,
+    delta=0.1,
+    w=0.5,
+    max_iter=1000,
+    iprint=1,
+):
+    cur = cnlo_optimize(points_per_shell, initialization, antipodal, delta, w, max_iter, iprint)
+    eps = 1e-5
+    while True:
+        nxt = cnlo_optimize(points_per_shell, cur, antipodal, delta, w, max_iter, iprint)
+        if (np.abs(nxt - cur) < eps).all():
+            break
+        cur = nxt
+    return nxt
