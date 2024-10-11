@@ -14,7 +14,7 @@ Options:
     -w WEIGHT, --weight WEIGHT  Weight for single shell term, 1-weight for mutiple shell term. [default: 0.5]
     -v, --verbose               Output gurobi message
     -q, --quiet                 Don't output any message
-    -a, --antipodal             Treat antipolar points as same
+    -a, --asym                  If set, the orientation is not antipodal symmetric 
     -t TIME, --time_limit TIME  Maximum time to run milp algorithm    [default: 600]
     --fslgrad                   If set, program will read and write in fslgrad format
 
