@@ -125,6 +125,8 @@ def arg_values(value, typefunc, numberOfValues=-1, is_single=False):
     Returns:
         result
     """
+    if not value:
+        return None
     value = value.strip()
     if value[0] == "(" and value[-1] == ")":
         value = value[1:-1]
