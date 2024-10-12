@@ -326,6 +326,35 @@ def incremental_sorting_single_shell(
     return np.concatenate(result)
 
 
+def fraction_distance(bvals, fraction):
+    bvals = np.array(bvals)
+    bvals = bvals / np.sum(bvals)
+
+    return np.abs(bvals - fraction).sum()
+
+
+def cal_incremental_number(fixed_bval: List[float], incre_bval: List[float], bvalList: List[float], num: int, fraction: List[float]):
+    res = {b: 0 for b in bvalList}
+    fixed_cnt = {b: fixed_bval.count(b) for b in bvalList}
+    incre_cnt = {b: incre_bval.count(b) for b in bvalList}
+
+
+    for _ in range(num):
+        mn, pos = 1e10, 0
+        for b in bvalList:
+            if incre_cnt[b]:
+                fixed_cnt[b] += 1
+                dis = fraction_distance([fixed_cnt[b] for b in bvalList], fraction)
+                if dis < mn:
+                    mn, pos = dis, b
+                fixed_cnt[b] -= 1
+        res[pos] += 1
+        fixed_cnt[pos] += 1
+        incre_cnt[pos] -= 1
+
+    return res
+
+
 def incremental_sorting_multi_shell_incre(
     fixed_points: np.ndarray,
     fixed_bval: np.ndarray,
@@ -394,8 +423,11 @@ def incremental_sorting_multi_shell_incre(
         max(fixed_angle, np.cos(covering_radius_upper_bound(n)))
         for n in range(K + 1, K + num + 1)
     ]
+    bval2pos = {b: [] for b in bvalList}
+    for i, b in enumerate(incre_bval):
+        bval2pos[b].append(i)
 
-    m = gp.Model("optimalSortingSingleShell")
+    m = gp.Model("optimalSortingMultiShell")
     m.Params.timeLimit = time_limit
     m.Params.MIPFocus = 1
     m.Params.OutputFlag = output_flag
@@ -427,6 +459,9 @@ def incremental_sorting_multi_shell_incre(
         m.addSOS(GRB.SOS_TYPE1, [x[i, j] for j in range(num)])
     for j in range(num):
         m.addSOS(GRB.SOS_TYPE1, [x[i, j] for i in range(N)])
+
+    incre_number = cal_incremental_number(fixed_bval, incre_bval, bvalList, num, fraction)
+    m.addConstrs(((gp.quicksum([x[i, j] for i in bval2pos[b] for j in range(num)]) == incre_number[b]) for b in bvalList), name='balence')
 
     for k in range(1, num + 1):
         m.addConstrs(
@@ -546,7 +581,7 @@ def incremental_sorting_multi_shell(
     for i, n in zip(bvalues, Ns):
         for _ in range(n):
             bvals.append(i)
-    fraction = [n / N for n in Ns]
+    fraction = np.array([n / N for n in Ns])
 
     fixed = []
     fixed_bval = []
