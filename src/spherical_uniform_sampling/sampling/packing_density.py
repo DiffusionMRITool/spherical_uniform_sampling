@@ -333,11 +333,16 @@ def fraction_distance(bvals, fraction):
     return np.abs(bvals - fraction).sum()
 
 
-def cal_incremental_number(fixed_bval: List[float], incre_bval: List[float], bvalList: List[float], num: int, fraction: List[float]):
+def cal_incremental_number(
+    fixed_bval: List[float],
+    incre_bval: List[float],
+    bvalList: List[float],
+    num: int,
+    fraction: List[float],
+):
     res = {b: 0 for b in bvalList}
     fixed_cnt = {b: fixed_bval.count(b) for b in bvalList}
     incre_cnt = {b: incre_bval.count(b) for b in bvalList}
-
 
     for _ in range(num):
         mn, pos = 1e10, 0
@@ -460,8 +465,19 @@ def incremental_sorting_multi_shell_incre(
     for j in range(num):
         m.addSOS(GRB.SOS_TYPE1, [x[i, j] for i in range(N)])
 
-    incre_number = cal_incremental_number(fixed_bval, incre_bval, bvalList, num, fraction)
-    m.addConstrs(((gp.quicksum([x[i, j] for i in bval2pos[b] for j in range(num)]) == incre_number[b]) for b in bvalList), name='balence')
+    incre_number = cal_incremental_number(
+        fixed_bval, incre_bval, bvalList, num, fraction
+    )
+    m.addConstrs(
+        (
+            (
+                gp.quicksum([x[i, j] for i in bval2pos[b] for j in range(num)])
+                == incre_number[b]
+            )
+            for b in bvalList
+        ),
+        name="balence",
+    )
 
     for k in range(1, num + 1):
         m.addConstrs(
