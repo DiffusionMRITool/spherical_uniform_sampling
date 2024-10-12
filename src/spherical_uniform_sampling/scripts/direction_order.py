@@ -83,7 +83,6 @@ def main(arguments):
                 bvecs[0],
                 gen_split(num, len(bvecs[0])),
                 time,
-                output_flag,
             )
             bval = [bvalues[0] for _ in range(len(bvecs[0]))]
         else:
@@ -96,7 +95,6 @@ def main(arguments):
                 gen_split(num, sum(len(l) for l in bvecs)),
                 w=weight,
                 time_limit=time,
-                output_flag=output_flag,
             )
         write_bvec(
             f"{root}_bvec{ext}",
