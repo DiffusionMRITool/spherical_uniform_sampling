@@ -379,7 +379,7 @@ def grad_cost(vects, *args):
     )
 
 
-def cnlo_optimize(
+def cnlo_optimize_one_step(
     points_per_shell,
     initialization=None,
     antipodal=True,
@@ -497,7 +497,7 @@ def cnlo_optimize(
     return vects[: 3 * nb_points].reshape((nb_points, 3))
 
 
-def iter_cnlo_optimize(
+def cnlo_optimize(
     points_per_shell,
     initialization=None,
     antipodal=True,
@@ -506,10 +506,10 @@ def iter_cnlo_optimize(
     max_iter=1000,
     iprint=1,
 ):
-    cur = cnlo_optimize(points_per_shell, initialization, antipodal, delta, w, max_iter, iprint)
+    cur = cnlo_optimize_one_step(points_per_shell, initialization, antipodal, delta, w, max_iter, iprint)
     eps = 1e-5
     while True:
-        nxt = cnlo_optimize(points_per_shell, cur, antipodal, delta, w, max_iter, iprint)
+        nxt = cnlo_optimize_one_step(points_per_shell, cur, antipodal, delta, w, max_iter, iprint)
         if (np.abs(nxt - cur) < eps).all():
             break
         cur = nxt
