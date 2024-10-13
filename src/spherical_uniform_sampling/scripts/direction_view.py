@@ -26,14 +26,6 @@ from docopt import docopt
 
 from spherical_uniform_sampling.lib.io_util import read_bvec, arg_bool, arg_values
 
-def simplices2edge(simplices):
-    start, end = [], []
-
-    for p in simplices:
-        start.extend([p[0], p[1], p[2]])
-        end.extend([p[1], p[2], p[0]])
-
-    return np.array(start), np.array(end)
 
 def get_colors(num):
     if num == 1 or num > 9:
@@ -58,11 +50,13 @@ def get_colors(num):
 
     return colors
 
+
 def get_opacity(num):
     if num == 1:
         return 1
     rg = np.arange(num)
     return 1 - 0.7 / (num - 1) * rg
+
 
 def draw_mesh(ax, bvecs, radius=1, opacity=1):
     bvecs = bvecs * radius
@@ -71,7 +65,15 @@ def draw_mesh(ax, bvecs, radius=1, opacity=1):
     y = bvecs.T[1]
     z = bvecs.T[2]
 
-    ax.plot_trisurf(x, y, z, triangles=tri.simplices, shade=True, color=(0.5, 0.5, 0.5), alpha=opacity)
+    ax.plot_trisurf(
+        x,
+        y,
+        z,
+        triangles=tri.simplices,
+        shade=True,
+        color=(0.5, 0.5, 0.5),
+        alpha=opacity,
+    )
 
 
 def draw_point(ax, bvecs, radius=1, color=(1, 1, 1)):
@@ -82,6 +84,7 @@ def draw_point(ax, bvecs, radius=1, color=(1, 1, 1)):
 
     ax.scatter(x, y, z, color=color)
 
+
 def main(arguments):
     antipodal = not arg_bool(arguments["--asym"], bool)
     only_combined = arg_bool(arguments["--combine"], bool)
@@ -91,7 +94,7 @@ def main(arguments):
     if antipodal:
         bvecs = list(map(lambda v: np.concatenate([v, -v]), bvecs))
 
-    fig, ax = plt.subplots(subplot_kw={'projection': '3d'})
+    fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
 
     colors = get_colors(len(bvecs))
     if only_combined:
