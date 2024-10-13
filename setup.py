@@ -17,7 +17,7 @@ setup(
     package_dir={
         "spherical_uniform_sampling": "src/spherical_uniform_sampling",
         "spherical_uniform_sampling.sampling": "src/spherical_uniform_sampling/sampling",
-        "spherical_uniform_sampling.io_util": "src/spherical_uniform_sampling/lib",
+        "spherical_uniform_sampling.lib": "src/spherical_uniform_sampling/lib",
     },
     scripts=[
         "src/spherical_uniform_sampling/scripts/combine_bvec_bval.py",
