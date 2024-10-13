@@ -19,12 +19,13 @@ Examples:
     # View multiple shell scheme by projecting onto a single sphere
     direction_view.py bvec1.txt bvec2.txt -c
 """
-import matplotlib.pyplot as plt
+from mayavi import mlab
 import numpy as np
 from scipy.spatial import ConvexHull
 from docopt import docopt
 
 from spherical_uniform_sampling.lib.io_util import read_bvec, arg_bool, arg_values
+
 
 def simplices2edge(simplices):
     start, end = [], []
@@ -34,6 +35,7 @@ def simplices2edge(simplices):
         end.extend([p[1], p[2], p[0]])
 
     return np.array(start), np.array(end)
+
 
 def get_colors(num):
     if num == 1 or num > 9:
@@ -58,29 +60,48 @@ def get_colors(num):
 
     return colors
 
+
 def get_opacity(num):
     if num == 1:
         return 1
     rg = np.arange(num)
     return 1 - 0.7 / (num - 1) * rg
 
-def draw_mesh(ax, bvecs, radius=1, opacity=1):
+
+def draw_mesh(bvecs, radius=1, opacity=1):
     bvecs = bvecs * radius
     tri = ConvexHull(bvecs)
     x = bvecs.T[0]
     y = bvecs.T[1]
     z = bvecs.T[2]
+    start, end = simplices2edge(tri.simplices)
 
-    ax.plot_trisurf(x, y, z, triangles=tri.simplices, shade=True, color=(0.5, 0.5, 0.5), alpha=opacity)
+    mlab.quiver3d(
+        x[start],
+        y[start],
+        z[start],
+        x[end] - x[start],
+        y[end] - y[start],
+        z[end] - z[start],
+        line_width=3,
+        scale_factor=1,
+        mode="2ddash",
+        color=(0, 0, 0),
+        opacity=opacity,
+    )
+    mlab.triangular_mesh(
+        x, y, z, tri.simplices, color=(0.5, 0.5, 0.5), opacity=opacity, line_width=2
+    )
 
 
-def draw_point(ax, bvecs, radius=1, color=(1, 1, 1)):
-    bvecs = bvecs * radius * 1.01
+def draw_point(bvecs, radius=1, color=(1, 1, 1)):
+    bvecs = bvecs * radius
     x = bvecs.T[0]
     y = bvecs.T[1]
     z = bvecs.T[2]
 
-    ax.scatter(x, y, z, color=color)
+    mlab.points3d(x, y, z, color=color, scale_factor=0.1, resolution=256)
+
 
 def main(arguments):
     antipodal = not arg_bool(arguments["--asym"], bool)
@@ -91,27 +112,22 @@ def main(arguments):
     if antipodal:
         bvecs = list(map(lambda v: np.concatenate([v, -v]), bvecs))
 
-    fig, ax = plt.subplots(subplot_kw={'projection': '3d'})
-
     colors = get_colors(len(bvecs))
     if only_combined:
         combined = np.concatenate(bvecs)
-        draw_mesh(ax, combined)
+        draw_mesh(combined)
         for i, vec in enumerate(bvecs):
-            draw_point(ax, vec, 1, colors[i])
+            draw_point(vec, 1, colors[i])
     else:
         opacity = get_opacity(len(bvecs))
         for i, vec in enumerate(bvecs):
-            draw_mesh(ax, vec, i + 1, opacity[i])
-            draw_point(ax, vec, i + 1, colors[i])
-
-    ax.set_box_aspect((1, 1, 1))
-    plt.axis("off")
+            draw_mesh(vec, i + 1, opacity[i])
+            draw_point(vec, i + 1, colors[i])
 
     if save_flle:
-        plt.savefig(save_flle)
+        mlab.savefig(save_flle)
     else:
-        plt.show()
+        mlab.show()
 
 
 if __name__ == "__main__":
