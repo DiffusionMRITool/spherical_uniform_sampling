@@ -28,6 +28,7 @@ setup(
         "src/spherical_uniform_sampling/scripts/direction_geem.py",
         "src/spherical_uniform_sampling/scripts/direction_order.py",
         "src/spherical_uniform_sampling/scripts/direction_statistics.py",
+        "src/spherical_uniform_sampling/scripts/direction_view.py",
     ],
     install_requires=[
         "numpy >= 1.19.5",

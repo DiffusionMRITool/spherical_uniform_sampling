@@ -110,5 +110,11 @@ direction_subsample.py --input grad.txt --output grad_subsample.txt -n 10,10,10
 direction_subsample.py --input grad_b1000.txt,grad_b2000.txt,grad_b3000.txt --output grad_subsample.txt -n 30,30,30
 ```
 
+### Examine the result
+
+Statistics of a scheme can be showed by `direction_statistics.py`
+
+You can see the orientation of b-vector file by `direction_order.py` (this depends on `matplotlib`, so you'll need to additionally install this package).
+
 ## License
 This project is licensed under the [LICENSE](LICENSE).
