@@ -114,7 +114,7 @@ direction_subsample.py --input grad_b1000.txt,grad_b2000.txt,grad_b3000.txt --ou
 
 Statistics of a scheme can be showed by `direction_statistics.py`
 
-You can see the orientation of b-vector file by `direction_order.py` (this depends on `matplotlib`, so you'll need to additionally install this package).
+You can see the orientation of b-vector file by `direction_view.py` (this depends on `vtk`, so you'll need to additionally install `vtk` python binding, see https://docs.vtk.org/en/latest/getting_started/index.html).
 
 ## License
 This project is licensed under the [LICENSE](LICENSE).
