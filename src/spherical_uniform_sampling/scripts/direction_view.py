@@ -66,7 +66,7 @@ def get_colors(num):
 
 def get_opacity(num):
     if num == 1:
-        return 1
+        return [1]
     rg = np.arange(num)
     return 1 - 0.7 / (num - 1) * rg
 
